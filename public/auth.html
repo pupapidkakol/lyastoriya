@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Вхід — ЛяСторія</title>
+</head>
+<body>
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+    <nav class="nav" aria-label="Головна навігація"><a href="index.html#games">Ігри</a><a href="index.html#theory">Теорія</a><a href="index.html#results">Результати</a></nav>
+    <div class="header__actions" id="authActions">
+      <a href="auth.html#login" class="btn btn--ghost">Увійти</a>
+      <a href="auth.html#register" class="btn btn--accent">Зареєструватися</a>
+    </div>
+  </div>
+</header>
+<main class="container auth">
+  <h1 id="authTitle">Вхід</h1>
+  <form id="loginForm" class="form" novalidate>
+    <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+    <label>Пароль<input name="password" type="password" autocomplete="current-password" required maxlength="72"></label>
+    <p class="form__error" role="alert"></p>
+    <button class="btn btn--accent" type="submit">Увійти</button>
+    <p class="hint">Немає акаунта? <a class="link" href="#register">Зареєструватися</a></p>
+  </form>
+  <form id="registerForm" class="form" hidden novalidate>
+    <label>Ім’я користувача<input name="username" autocomplete="username" required minlength="3" maxlength="20"></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+    <label>Пароль (від 10 символів)<input name="password" type="password" autocomplete="new-password" required minlength="10" maxlength="72"></label>
+    <p class="form__error" role="alert"></p>
+    <button class="btn btn--accent" type="submit">Створити акаунт</button>
+    <p class="hint">Уже є акаунт? <a class="link" href="#login">Увійти</a></p>
+  </form>
+</main>
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

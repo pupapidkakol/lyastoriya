@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ЛяСторія — історія України через ігри</title>
+  <meta name="description" content="Відкривай історію України через ігри, досліджуй ключові події та бач, як зростають твої знання.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+    <nav class="nav" aria-label="Головна навігація">
+      <a href="#games">Ігри</a>
+      <a href="#theory">Теорія</a>
+      <a href="#results">Результати</a>
+    </nav>
+    <div class="header__actions" id="authActions">
+      <a href="auth.html#login" class="btn btn--ghost">Увійти</a>
+      <a href="auth.html#register" class="btn btn--accent">Зареєструватися</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero container">
+    <div class="hero__text">
+      <p class="label"><span class="dot"></span>Історія України. Твоя нова перспектива.</p>
+      <h1>Минуле ближче,<br>ніж здається.</h1>
+      <p class="lead">Відкривай історію України через ігри, досліджуй ключові події та бач, як зростають твої знання.</p>
+      <div class="hero__btns">
+        <a href="game.html?g=fake-or-fact" class="btn btn--accent">Почати гру <span aria-hidden="true">↗</span></a>
+        <a href="#theory" class="btn btn--ghost">Дослідити теорію</a>
+      </div>
+      <p class="note">Першу гру можна пройти без реєстрації</p>
+    </div>
+    <figure class="hero__card">
+      <div class="hero__meta"><span>Цифровий архів</span><span>№ 001</span></div>
+      <img src="images/coin.jpg" alt="Срібник Володимира">
+      <figcaption>
+        <strong>Срібник Володимира</strong>
+        <span>Київська Русь · кінець X ст.</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="container epochs" aria-label="Епохи">
+    <div class="epochs__head"><span>Обери свій час</span><span>Від витоків до сьогодення →</span></div>
+    <ul class="epochs__list">
+      <li class="is-active"><button type="button"><small>IX–XIII ст.</small>Русь-Україна</button></li>
+      <li><button type="button"><small>XVI–XVIII ст.</small>Козацька доба</button></li>
+      <li><button type="button"><small>1917–1921</small>Українська революція</button></li>
+      <li><button type="button"><small>1991 — сьогодні</small>Незалежна Україна</button></li>
+    </ul>
+  </section>
+
+  <section class="section container" id="games">
+    <p class="label">01 / Ігри</p>
+    <div class="section__head">
+      <div>
+        <h2>Не зазубрюй. Занурюйся.</h2>
+        <p class="sub">Обери виклик — і перетвори факти на відкриття.</p>
+      </div>
+      <a href="#" class="link">Усі ігри →</a>
+    </div>
+    <div class="grid-3">
+      <article class="card">
+        <div class="card__img"><img src="images/kyiv.jpg" alt=""><span class="tag">IX–XIII ст.</span></div>
+        <div class="card__body">
+          <p class="card__meta"><span class="accent">Історичний квіз</span><span>7 хв</span></p>
+          <h3>Київ крізь століття</h3>
+          <p>Впізнавай пам’ятки й відкривай історію міста, що стало серцем Русі.</p>
+          <div class="card__foot"><span>Початковий рівень</span><span class="soon">Скоро</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card__img"><img src="images/cossacks.jpg" alt=""><span class="tag">XVI–XVIII ст.</span></div>
+        <div class="card__body">
+          <p class="card__meta"><span class="accent">Знайди відповідність</span><span>10 хв</span></p>
+          <h3>Код козацької доби</h3>
+          <p>Поєднуй імена, події та дати. Розгадай, як творилася Гетьманщина.</p>
+          <div class="card__foot"><span>Середній рівень</span><span class="soon">Скоро</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card__img"><img src="images/revolution.jpg" alt=""><span class="tag">1917–1921</span></div>
+        <div class="card__body">
+          <p class="card__meta"><span class="accent">Хронологічний виклик</span><span>8 хв</span></p>
+          <h3>На шляху до свободи</h3>
+          <p>Віднови послідовність подій Української революції 1917–1921 років.</p>
+          <div class="card__foot"><span>Середній рівень</span><a href="game.html?g=chronology" class="accent">Грати ↗</a></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card__img"><span class="tag">Усі епохи</span></div>
+        <div class="card__body">
+          <p class="card__meta"><span class="accent">Швидка гра</span><span>5 хв</span></p>
+          <h3>Фейк чи факт</h3>
+          <p>Десять тверджень з історії України. Відділи правду від міфів.</p>
+          <div class="card__foot"><span>Початковий рівень</span><a href="game.html?g=fake-or-fact" class="accent">Грати ↗</a></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="band" id="theory">
+    <div class="container theory">
+      <div>
+        <p class="label">02 / Теорія</p>
+        <h2>За кожною датою —<br>жива історія.</h2>
+        <p class="sub">Коротко про важливе: зрозумілі пояснення, ключові постаті та зв’язки між подіями. Читай, щоб бачити більше.</p>
+        <a href="#" class="link">Відкрити теорію →</a>
+      </div>
+      <ul class="theory__list">
+        <li><a href="#"><span class="period">IX–XIII ст.</span><div><h3>Як постала Київська Русь</h3><p>Державність · 6 хв читання</p></div><span aria-hidden="true">↗</span></a></li>
+        <li><a href="#"><span class="period">1648–1657</span><div><h3>Богдан Хмельницький і Гетьманщина</h3><p>Постаті та події · 8 хв читання</p></div><span aria-hidden="true">↗</span></a></li>
+        <li><a href="#"><span class="period">1991</span><div><h3>Незалежність: як це було</h3><p>Новітня історія · 5 хв читання</p></div><span aria-hidden="true">↗</span></a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section container results" id="results">
+    <div>
+      <p class="label">03 / Результати</p>
+      <h2>Твій шлях в історії<br>починається тут.</h2>
+      <p class="sub">Створи акаунт, щоб зберігати результати ігор, повертатися до складних тем і помічати власний прогрес.</p>
+      <div id="resultsCta"><a href="auth.html#register" class="btn btn--accent">Зареєструватися <span aria-hidden="true">↗</span></a>
+      <p class="note">У власному темпі. Без перегонів з іншими.</p></div>
+    </div>
+    <aside class="progress" aria-label="Приклад профілю">
+      <div class="progress__head"><span>Твій прогрес</span><small id="progLabel">Приклад профілю</small></div>
+      <div class="stats">
+        <div><b id="statGames">04</b><span>ігор пройдено</span></div>
+        <div><b id="statPct">82%</b><span>правильних відповідей</span></div>
+        <div><b id="statKinds">03</b><span id="statKindsLabel">теми досліджено</span></div>
+      </div>
+      <div class="progress__topic" data-example><span>Козацька доба</span><span>3 / 5 тем</span></div>
+      <div class="bars" data-example><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <p class="progress__next" data-example>Наступне відкриття — Пилип Орлик і його Конституція</p>
+    </aside>
+  </section>
+</main>
+
+<footer class="container footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+      <span>Знати минуле. Розуміти сьогодні.</span>
+    </div>
+    <nav><a href="#games">Ігри</a><a href="#theory">Теорія</a><a href="#results">Результати</a></nav>
+  </div>
+  <div class="footer__bottom">
+    <span>© <span id="year">2026</span> ЛяСторія. Створено з цікавістю до історії.</span>
+    <span><a href="#">Політика конфіденційності</a><a href="#">Зв’язатися з нами ↗</a></span>
+  </div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
