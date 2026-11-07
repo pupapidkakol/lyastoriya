@@ -786,7 +786,14 @@ button.btn:disabled {
   margin-bottom: 24px
 }
 
-.answers {
+.quiz-answers,
+.fact-answers {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px
+}
+
+.matching-answers {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(4, minmax(72px, auto));
@@ -794,14 +801,16 @@ button.btn:disabled {
   gap: 12px
 }
 
-.answers .btn {
+.quiz-answers .btn,
+.fact-answers .btn,
+.matching-answers .btn {
   justify-content: center;
   height: 48px;
   font-size: 15px
 }
 
-.answers .question,
-.answers .answer {
+.answers .matching-question,
+.answers .matching-answer {
   position: relative;
   min-height: 72px;
   display: flex;
@@ -812,8 +821,8 @@ button.btn:disabled {
   overflow: hidden;
 }
 
-.answers button.question,
-.answers button.answer {
+.answers button.matching-question,
+.answers button.matching-answer {
   width: 100%;
   height: auto;
   color: var(--text);
@@ -822,14 +831,14 @@ button.btn:disabled {
   cursor: pointer;
 }
 
-.answers .question {
+.answers .matching-question {
   padding-left: 50px;
   background: var(--surface);
   border: 1px solid var(--line);
   color: var(--text);
 }
 
-.answers .question::before {
+.answers .matching-question::before {
   content: '';
   position: absolute;
   left: 20px;
@@ -838,7 +847,7 @@ button.btn:disabled {
   background: var(--dim);
 }
 
-.answers .answer {
+.answers .matching-answer {
   justify-content: center;
   padding-left: 42px;
   background: rgba(169, 240, 229, .07);
@@ -850,7 +859,7 @@ button.btn:disabled {
   letter-spacing: .02em;
 }
 
-.answers .answer::before {
+.answers .matching-answer::before {
   content: '';
   position: absolute;
   left: 18px;
@@ -860,18 +869,18 @@ button.btn:disabled {
   transform: rotate(45deg);
 }
 
-.answers button.question.is-selected {
+.answers button.matching-question.matching-is-selected {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px var(--accent);
 }
 
-.answers button.question.is-matched,
-.answers button.answer.is-matched {
+.answers button.matching-question.matching-is-matched,
+.answers button.matching-answer.matching-is-matched {
   border-color: var(--accent);
   opacity: .58;
 }
 
-.answers button.answer.is-wrong {
+.answers button.matching-answer.matching-is-wrong {
   border-color: #ff8f87;
   animation: matching-wrong .25s ease-in-out;
 }
@@ -883,19 +892,27 @@ button.btn:disabled {
 }
 
 @media (max-width:600px) {
-  .answers {
+  .matching-answers {
     grid-template-columns: 1fr;
     grid-template-rows: none;
     grid-auto-flow: row;
     gap: 8px
   }
 
-  .answers .question {
+  .quiz-answers {
+    grid-template-columns: 1fr
+  }
+
+  .fact-answers {
+    grid-template-columns: repeat(2, 1fr)
+  }
+
+  .answers .matching-question {
     margin-bottom: -8px;
     border-radius: 8px 8px 0 0
   }
 
-  .answers .answer {
+  .answers .matching-answer {
     margin-bottom: 12px;
     border-radius: 0 0 8px 8px
   }

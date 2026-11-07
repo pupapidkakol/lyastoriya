@@ -141,7 +141,7 @@
           panel.textContent = '';
           var bar = el('div', 'bar'), fill = el('i'); fill.style.width = (i / ROUND * 100) + '%'; bar.appendChild(fill);
           var meta = el('div', 'q-meta'); meta.append(el('span', null, ERA[q[0]]), el('span', null, (i + 1) + ' / ' + ROUND));
-          var answers = el('div', 'answers');
+          var answers = el('div', 'fact-answers');
           answers.append(btn('Факт', 'btn--ghost', () => { reply(q, 1, answers); }), btn('Фейк', 'btn--ghost', () => { reply(q, 0, answers); }));
           panel.append(bar, meta, el('p', 'q-text', q[1]), answers);
         }

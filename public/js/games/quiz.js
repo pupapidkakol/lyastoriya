@@ -74,7 +74,7 @@
                     panel.textContent = '';
                     let bar = el('div', 'bar'), fill = el('i'); fill.style.width = (i / ROUND * 100) + '%'; bar.appendChild(fill);
                     let meta = el('div', 'q-meta'); meta.append(el('span', null, (i + 1) + ' / ' + ROUND));
-                    let answers = el('div', 'answers');
+                    let answers = el('div', 'quiz-answers');
                     q.answers.forEach((answer) => {
                         answers.append(btn(answer.text, 'btn--ghost', () => { reply(q, answer, answers); }));
                     });
