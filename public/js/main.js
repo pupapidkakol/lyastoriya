@@ -1,4 +1,8 @@
-document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+var year = document.getElementById('year');
+
+if (year) {
+  year.textContent = new Date().getFullYear();
+}
 
 document.querySelectorAll('img').forEach(function (img) {
   img.addEventListener('error', function () { img.classList.add('is-missing'); });
@@ -23,7 +27,7 @@ if (box && window.api) {
     b.onclick = function () { api.logout().then(function () { location.reload(); }); };
     box.append(s, b);
     showStats(d.stats);
-  }).catch(function () {});
+  }).catch(function () { });
 }
 
 // Реальна статистика в блоці «Результати» (лише для користувача, що увійшов)

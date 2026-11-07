@@ -6,7 +6,7 @@ const { DatabaseSync } = require('node:sqlite'); // вбудована в Node �
 const PROD = process.env.NODE_ENV === 'production';
 const PORT = process.env.PORT || 3000;
 const SESSION_TTL = 7 * 24 * 3600 * 1000;
-const GAMES = ['fake-or-fact', 'chronology'];
+const GAMES = ['fake-or-fact', 'chronology', 'quiz', 'matching-task'];
 
 // ---- База даних (SQLite, лише параметризовані запити) ----
 fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });

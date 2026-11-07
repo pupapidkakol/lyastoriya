@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html lang="uk">
+
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <title>Гра — ЛяСторія</title>
 </head>
+
 <body>
-<header class="header">
-  <div class="container header__inner">
-    <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
-    <nav class="nav" aria-label="Головна навігація"><a href="index.html#games">Ігри</a><a href="index.html#theory">Теорія</a><a href="index.html#results">Результати</a></nav>
-    <div class="header__actions" id="authActions">
-      <a href="auth.html#login" class="btn btn--ghost">Увійти</a>
-      <a href="auth.html#register" class="btn btn--accent">Зареєструватися</a>
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+      <nav class="nav" aria-label="Головна навігація"><a href="index.html#games">Ігри</a><a
+          href="index.html#theory">Теорія</a><a href="index.html#results">Результати</a></nav>
+      <div class="header__actions" id="authActions">
+        <a href="auth.html#login" class="btn btn--ghost">Увійти</a>
+        <a href="auth.html#register" class="btn btn--accent">Зареєструватися</a>
+      </div>
     </div>
-  </div>
-</header>
-<!-- Шаблон гри: game.html?g=<id>. Додати нову гру = додати файл js/games/<id>.js і id у js/game-page.js -->
-<main class="container game">
-  <a href="index.html#games" class="back">← Усі ігри</a>
-  <h1 id="gameTitle">Гра</h1>
-  <div id="gameRoot" aria-live="polite"></div>
-</main>
-<script src="js/api.js"></script>
-<script src="js/main.js"></script>
-<script src="js/game-page.js"></script>
+  </header>
+  <!-- Шаблон гри: game.html?g=<id>. Додати нову гру = додати файл js/games/<id>.js і id у js/game-page.js -->
+  <main class="container game">
+    <a href="index.html#games" class="back">← Усі ігри</a>
+    <h1 id="gameTitle">Гра</h1>
+    <div id="gameRoot" aria-live="polite"></div>
+  </main>
+  <script src="js/api.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/game-page.js"></script>
 </body>
+
 </html>
