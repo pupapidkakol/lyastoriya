@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Профіль</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container header__inner">
+            <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+            <nav class="nav" aria-label="Головна навігація">
+                <a href="index.html#games">Ігри</a>
+                <a href="index.html#theory">Теорія</a>
+                <a href="index.html#results">Результати</a>
+            </nav>
+            <div class="header__actions" id="authActions">
+                <a href="auth.html#login" class="btn btn--ghost">Увійти</a>
+                <a href="auth.html#register" class="btn btn--accent">Зареєструватися</a>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="container profile">
+        <div id="profileRoot" aria-live="polite">
+            <img class="profile__avatar" src="images/default_avatar.png" alt="Аватар">
+            <div class="profile__content">
+                <h1 class="profile__name">Ім’я користувача</h1>
+                <p class="profile__bio">Опис профілю</p>
+                <aside class="progress" aria-label="Статистика профілю">
+                    <div class="progress__head"><span>Прогрес</span><small id="progLabel">Статистика</small></div>
+                    <div class="stats">
+                        <div><b id="statGames">0</b><span>ігор пройдено</span></div>
+                        <div><b id="statPct">0%</b><span>правильних відповідей</span></div>
+                        <div><b id="statKinds">0</b><span id="statKindsLabel">різних ігор</span></div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+
+    <footer class="container footer">
+        <div class="footer__top">
+            <div class="footer__brand">
+                <a href="index.html" class="logo"><span class="logo__bars"><i></i><i></i><i></i></span>ЛяСторія</a>
+                <span>Знати минуле. Розуміти сьогодні.</span>
+            </div>
+            <nav><a href="#games">Ігри</a><a href="#theory">Теорія</a><a href="#results">Результати</a></nav>
+        </div>
+        <div class="footer__bottom">
+            <span>© <span id="year">2026</span> ЛяСторія. Створено з цікавістю до історії.</span>
+            <span><a href="#">Політика конфіденційності</a><a href="#">Зв’язатися з нами ↗</a></span>
+        </div>
+    </footer>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+
+</html>
