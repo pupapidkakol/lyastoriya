@@ -1,7 +1,7 @@
 // Завантажувач ігор. Кожна гра — файл js/games/<id>.js, що реєструє Games[id] = { mount(root) }.
 window.Games = {};
 (function () {
-  var REGISTRY = { 'fake-or-fact': 'Фейк чи факт', 'chronology': 'На шляху до свободи' }; // білий список: у src підставляємо лише ці id
+  var REGISTRY = { 'fake-or-fact': 'Фейк чи факт', 'chronology': 'На шляху до свободи', 'timeline': 'Коли це сталося?' }; // білий список: у src підставляємо лише ці id
   var id = new URLSearchParams(location.search).get('g') || '';
   var root = document.getElementById('gameRoot');
   if (!Object.prototype.hasOwnProperty.call(REGISTRY, id)) { root.textContent = 'Таку гру не знайдено.'; return; }
