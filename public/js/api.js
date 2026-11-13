@@ -8,7 +8,11 @@ window.api = (function () {
       credentials: 'same-origin'
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (d) {
-        if (!r.ok) { var e = new Error(d.error || 'Помилка сервера'); e.status = r.status; throw e; }
+        if (!r.ok) {
+          var e = new Error(d.error || 'Помилка сервера');
+          e.status = r.status;
+          throw e;
+        }
         return d;
       });
     });

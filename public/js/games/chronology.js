@@ -16,11 +16,27 @@
     [19200421, 'Договір Петлюри з Пілсудським', '21 квітня 1920'],
     [19210318, 'Ризький мирний договір', '18 березня 1921']
   ];
-  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
-  function btn(label, cls, fn) { var b = el('button', 'btn ' + cls, label); b.type = 'button'; b.addEventListener('click', fn); return b; }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function btn(label, cls, fn) {
+    var b = el('button', 'btn ' + cls, label);
+    b.type = 'button';
+    b.addEventListener('click', fn);
+    return b;
+  }
   function sample(n) {
     var a = EV.slice(), r = new Uint32Array(1), i, j, t;
-    for (i = a.length - 1; i > 0; i--) { crypto.getRandomValues(r); j = r[0] % (i + 1); t = a[i]; a[i] = a[j]; a[j] = t; }
+    for (i = a.length - 1; i > 0; i--) {
+      crypto.getRandomValues(r);
+      j = r[0] % (i + 1);
+      t = a[i];
+      a[i] = a[j];
+      a[j] = t;
+    }
     return a.slice(0, n);
   }
 
@@ -42,21 +58,22 @@
         var round = 0, mistakes = 0;
 
         function nextRound() {
-          var evs = sample(PER), order = evs.slice().sort(function (a, b) { return a[0] - b[0]; }), next = 0;
+          var evs = sample(PER), order = evs.slice().sort((a, b) => { return a[0] - b[0]; }), next = 0;
           panel.textContent = '';
           var bar = el('div', 'bar'), fill = el('i'); fill.style.width = (round / ROUNDS * 100) + '%'; bar.appendChild(fill);
           var meta = el('div', 'q-meta'), mLabel = el('span', null, 'Помилки: ' + mistakes);
           meta.append(el('span', null, 'Раунд ' + (round + 1) + ' / ' + ROUNDS), mLabel);
           var list = el('div', 'events');
-          evs.forEach(function (ev) {
+          evs.forEach((ev) => {
             var b = el('button', 'event'); b.type = 'button'; b.appendChild(el('span', null, ev[1]));
-            b.addEventListener('click', function () {
+            b.addEventListener('click', () => {
               if (ev === order[next]) {
                 b.classList.add('done'); b.disabled = true; b.appendChild(el('span', 'ev-date', ev[2])); next++;
                 if (next === PER) done();
               } else {
                 mistakes++; mLabel.textContent = 'Помилки: ' + mistakes;
-                b.classList.add('wrong'); setTimeout(function () { b.classList.remove('wrong'); }, 500);
+                b.classList.add('wrong');
+                setTimeout(() => { b.classList.remove('wrong'); }, 500);
               }
             });
             list.appendChild(b);
@@ -66,7 +83,7 @@
 
         function done() {
           var last = round === ROUNDS - 1;
-          var nb = btn(last ? 'Результат' : 'Наступний раунд', 'btn--accent', function () { round++; last ? finish() : nextRound(); });
+          var nb = btn(last ? 'Результат' : 'Наступний раунд', 'btn--accent', () => { round++; last ? finish() : nextRound(); });
           nb.style.marginTop = '16px'; panel.appendChild(nb); nb.focus();
         }
 
@@ -79,9 +96,9 @@
             el('p', 'q-text', mistakes === 0 ? 'Бездоганно: жодної помилки.' : mistakes <= 5 ? 'Добре знаєш хронологію.' : 'Варто повторити дати. Спробуй ще раз.'),
             status, btn('Грати ще', 'btn--accent', play)
           );
-          api.saveResult({ game: 'chronology', score: score, total: MAX }).then(function () {
+          api.saveResult({ game: 'chronology', score: score, total: MAX }).then(() => {
             status.textContent = 'Результат збережено у твоєму профілі.';
-          }).catch(function (e) {
+          }).catch((e) => {
             if (e.status === 401) {
               status.textContent = 'Увійди в акаунт, щоб зберігати результати. ';
               var a = el('a', 'link', 'Увійти'); a.href = 'auth.html#login'; status.appendChild(a);
