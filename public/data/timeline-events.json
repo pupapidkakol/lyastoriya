@@ -1,0 +1,195 @@
+{
+  "meta": {
+    "min": 900,
+    "max": 2000,
+    "note": "from/to — допустимий діапазон правильної відповіді (роки). Якщо подію датують однозначно, from == to."
+  },
+  "events": [
+    {
+      "id": "baptism-rus",
+      "title": "Хрещення Русі",
+      "text": "Київський князь Володимир Святославич приймає християнство й охрещує киян. Нова віра стає офіційною для держави.",
+      "from": 988, "to": 989,
+      "dateLabel": "988 р. (за літописом; у науці також 988–989)",
+      "fact": "Традиційна дата — 988 рік за «Повістю врем’яних літ». В Encyclopedia of Ukraine вказано 988–989 роки, тож зараховуємо обидва. Християнізація була тривалим процесом: княгиня Ольга хрестилася ще раніше.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Christianization of Ukraine — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/c/h/christianizationofukraine.htm" },
+        { "type": "стаття", "title": "Затилюк Я. Хрещення Русі князем Володимиром: конструювання історичної оповіді. Український історичний журнал, 2014, №1", "url": "https://nasu-periodicals.org.ua/index.php/uhj/article/download/29365/23456/46401" }
+      ]
+    },
+    {
+      "id": "ukraina-1187",
+      "title": "Перша літописна згадка слова «Україна»",
+      "text": "У літописі розповідається про смерть переяславського князя Володимира Глібовича. Поруч із цим з’являється слово, яке пізніше стане назвою нашої країни.",
+      "from": 1187, "to": 1187,
+      "dateLabel": "бл. 1187 р.",
+      "fact": "Це Київський літопис, що входить до Іпатіївського. Тоді «Україна» означала південні прикордонні землі Русі, а не всю сучасну державу.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Kyiv Chronicle — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CK%5CY%5CKyivChronicle.htm" },
+        { "type": "Вікіпедія", "title": "Name of Ukraine — Wikipedia", "url": "https://en.wikipedia.org/wiki/Name_of_Ukraine" }
+      ]
+    },
+    {
+      "id": "kyiv-1240",
+      "title": "Облога й руйнування Києва військом Батия",
+      "text": "Монгольське військо штурмує Київ. Оборону очолює воєвода Дмитро. Після облоги місто, колишня столиця Русі, лежить у руїнах.",
+      "from": 1240, "to": 1240,
+      "dateLabel": "листопад–грудень 1240 р.",
+      "fact": "За Encyclopedia of Ukraine, Батий узяв Київ і влаштував різанину 6 грудня 1240 року. Дослідники сперечаються про точний день падіння міста (19 листопада або 6 грудня), але рік не викликає сумнівів.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Tatars — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CT%5CA%5CTatars.htm" },
+        { "type": "енциклопедія", "title": "Batu Khan — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CB%5CA%5CBatuKhan.htm" },
+        { "type": "стаття", "title": "Maiorov O. The Mongolian Capture of Kiev: The Two Dates", "url": "https://chtyvo.org.ua/authors/Maiorov_Oleksandr/The_Mongolian_Capture_of_Kiev_The_Two_Dates_anhl.pdf" },
+        { "type": "Вікіпедія", "title": "Siege of Kiev (1240) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Siege_of_Kiev_(1240)" }
+      ]
+    },
+    {
+      "id": "lviv-1256",
+      "title": "Перша літописна згадка про Львів",
+      "text": "У Галицько-Волинському літописі вперше з’являється місто, яке, за традицією, князь Данило назвав на честь сина Лева.",
+      "from": 1256, "to": 1256,
+      "dateLabel": "1256 р.",
+      "fact": "Найчастіше засновником міста вважають Данила Галицького, а 1256 рік — датою першої письмової згадки. Столицею Галицько-Волинської держави Львів зробив уже Лев Данилович.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Lev Danylovych — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CL%5CE%5CLevDanylovych.htm" },
+        { "type": "енциклопедія", "title": "Lviv — Britannica Kids", "url": "https://kids.britannica.com/students/article/Lviv/315664" },
+        { "type": "Вікіпедія", "title": "History of Lviv — Wikipedia", "url": "https://en.wikipedia.org/wiki/History_of_Lviv" }
+      ]
+    },
+    {
+      "id": "lublin-1569",
+      "title": "Люблінська унія",
+      "text": "Королівство Польське й Велике князівство Литовське об’єднуються в одну державу — Річ Посполиту. Київщина, Волинь та інші українські землі переходять під польську корону.",
+      "from": 1569, "to": 1569,
+      "dateLabel": "1 липня 1569 р.",
+      "fact": "Акт унії підписали в Люблині 1 липня 1569 року. Для українських земель це означало входження до складу Польщі, що змінило їхнє політичне й релігійне життя.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Lublin, Union of — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/L/U/LublinUnionof.htm" },
+        { "type": "енциклопедія", "title": "Lublin, Union of (1569) — Encyclopedia.com", "url": "https://www.encyclopedia.com/history/encyclopedias-almanacs-transcripts-and-maps/lublin-union-1569" }
+      ]
+    },
+    {
+      "id": "khmelnytsky-1648",
+      "title": "Початок повстання Богдана Хмельницького",
+      "text": "Запорозькі козаки на чолі з Хмельницьким виступають проти Речі Посполитої. Починається велика війна, яка змінить карту України.",
+      "from": 1648, "to": 1648,
+      "dateLabel": "1648 р. (початок — січень)",
+      "fact": "Повстання почалося на Запоріжжі на початку 1648 року. Воно переросло в загальнонаціональну війну, внаслідок якої виникла козацька держава — Гетьманщина.",
+      "sources": [
+        { "type": "Вікіпедія", "title": "Khmelnytsky Uprising — Wikipedia", "url": "https://en.wikipedia.org/wiki/Khmelnytsky_Uprising" },
+        { "type": "Вікіпедія", "title": "Pereiaslav Agreement (розділ про передісторію) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Pereiaslav_Agreement" }
+      ]
+    },
+    {
+      "id": "pereiaslav-1654",
+      "title": "Переяславська рада",
+      "text": "Гетьман Хмельницький і козацька старшина присягають московському цареві Олексію Михайловичу. Що саме означала ця угода, історики сперечаються досі.",
+      "from": 1654, "to": 1654,
+      "dateLabel": "18 січня 1654 р. (н. ст.)",
+      "fact": "Присягу склали в Переяславі в січні 1654 року, а текст «Березневих статей» остаточно погодили в Москві пізніше того ж року. Тлумачення угоди — одна з найгостріших дискусій в історіографії.",
+      "sources": [
+        { "type": "Вікіпедія", "title": "Pereiaslav Agreement — Wikipedia", "url": "https://en.wikipedia.org/wiki/Pereiaslav_Agreement" },
+        { "type": "рецензія", "title": "Basarab J. Pereiaslav 1654: A Historiographical Study (рецензія, CBRA)", "url": "https://cbra.library.utoronto.ca/items/show/38795" }
+      ]
+    },
+    {
+      "id": "orlyk-1710",
+      "title": "Конституція Пилипа Орлика",
+      "text": "У вигнанні, в місті Бендери, новообраний гетьман укладає з козацькою старшиною документ. Він обмежує владу гетьмана й створює козацький парламент. Його називають першою конституцією України.",
+      "from": 1710, "to": 1710,
+      "dateLabel": "5 (16) квітня 1710 р.",
+      "fact": "Документ має 16 статей і преамбулу. Дата 5 квітня — за старим стилем, 16 квітня — за новим, обидві дати стосуються одного дня 1710 року.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Bendery, Constitution of — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/B/E/BenderyConstitutionof.htm" },
+        { "type": "Вікіпедія", "title": "Constitution of Pylyp Orlyk — Wikipedia", "url": "https://en.wikipedia.org/wiki/Constitution_of_Pylyp_Orlyk" }
+      ]
+    },
+    {
+      "id": "sich-1775",
+      "title": "Зруйнування Запорозької Січі",
+      "text": "Російське військо за наказом імператриці Катерини ІІ оточує Нову (Підпільненську) Січ і знищує останній осередок козацької вольниці.",
+      "from": 1775, "to": 1775,
+      "dateLabel": "15–16 червня 1775 р.",
+      "fact": "Нову Січ зруйнував російський корпус генерала Текелі. У маніфесті Катерина ІІ офіційно скасувала Запорозьке військо.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Zaporozhian Sich — Encyclopedia of Ukraine", "url": "https://encyclopediaofukraine.com/pages%5CZ%5CA%5CZaporozhianSich.htm" },
+        { "type": "енциклопедія", "title": "Zaporizhia, The — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CZ%5CA%5CZaporizhiaThe.htm" },
+        { "type": "Вікіпедія", "title": "Liquidation of the Zaporozhian Sich — Wikipedia", "url": "https://en.wikipedia.org/wiki/Liquidation_of_the_Zaporozhian_Sich" }
+      ]
+    },
+    {
+      "id": "kobzar-1840",
+      "title": "Вихід першого «Кобзаря» Тараса Шевченка",
+      "text": "У Петербурзі виходить тоненька збірка з кількох поезій молодого автора. Вона відкриває нову добу в українській літературі.",
+      "from": 1840, "to": 1840,
+      "dateLabel": "1840 р.",
+      "fact": "Перше видання «Кобзаря» містило вісім творів, його надрукували в Петербурзі. Згодом назву «Кобзар» почали застосовувати до всієї поетичної спадщини Шевченка.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Kobzar — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CK%5CO%5CKobzarIT.htm" },
+        { "type": "Вікіпедія", "title": "Kobzar (poetry collection) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Kobzar_(poetry_collection)" },
+        { "type": "енциклопедія", "title": "Kobzar — Taras Shevchenko: Encyclopedia of the life and works", "url": "https://t-shevchenko.name/en/Kobzar.html" }
+      ]
+    },
+    {
+      "id": "rada-1917",
+      "title": "Створення Української Центральної Ради",
+      "text": "Після повалення царя в Росії українські партії й організації об’єднуються в Києві. Очолює новий орган історик Михайло Грушевський.",
+      "from": 1917, "to": 1917,
+      "dateLabel": "17 березня 1917 р. (н. ст.)",
+      "fact": "Центральну Раду створили в Києві 17 березня 1917 року (4 березня за ст. ст.). Згодом вона проголосила автономію, а потім незалежність УНР.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Central Rada — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CC%5CE%5CCentralRada.htm" },
+        { "type": "енциклопедія", "title": "Society of Ukrainian Progressives — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CS%5CO%5CSocietyofUkrainianProgressives.htm" },
+        { "type": "Вікіпедія", "title": "Central Rada — Wikipedia", "url": "https://en.wikipedia.org/wiki/Central_Rada" }
+      ]
+    },
+    {
+      "id": "zluka-1919",
+      "title": "Акт Злуки УНР і ЗУНР",
+      "text": "На Софійській площі в Києві урочисто проголошують об’єднання Української Народної Республіки та Західноукраїнської Народної Республіки. Сьогодні цей день — державне свято, День Соборності.",
+      "from": 1919, "to": 1919,
+      "dateLabel": "22 січня 1919 р.",
+      "fact": "Універсал Директорії УНР проголосили 22 січня 1919 року. Об’єднання було значною мірою символічним: обидві держави зберігали власні армії й адміністрації.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Struggle for independence (1917–1921) — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/S/T/StruggleforIndependence1917hD720.htm" },
+        { "type": "Вікіпедія", "title": "Unification Act — Wikipedia", "url": "https://en.wikipedia.org/wiki/Unification_Act" }
+      ]
+    },
+    {
+      "id": "holodomor",
+      "title": "Голодомор",
+      "text": "Штучний голод, спричинений політикою радянської влади, забирає життя мільйонів людей у селах Радянської України. Пік смертності припадає на весну.",
+      "from": 1932, "to": 1933,
+      "dateLabel": "1932–1933 рр.",
+      "fact": "Голодомор тривав у 1932–1933 роках, найбільше жертв було навесні 1933-го. Кількість загиблих історики оцінюють по-різному; у всіх оцінках ідеться про мільйони людей.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Holodomor — Encyclopaedia Britannica", "url": "https://www.britannica.com/event/Holodomor" },
+        { "type": "Вікіпедія", "title": "Holodomor — Wikipedia", "url": "https://en.wikipedia.org/wiki/Holodomor" }
+      ]
+    },
+    {
+      "id": "chornobyl-1986",
+      "title": "Аварія на Чорнобильській АЕС",
+      "text": "Вибухає четвертий енергоблок станції поблизу Прип’яті. Радіоактивні викиди змушують евакуювати десятки тисяч людей і створюють зону відчуження.",
+      "from": 1986, "to": 1986,
+      "dateLabel": "26 квітня 1986 р.",
+      "fact": "Вибух стався вночі 26 квітня 1986 року. Це найбільша аварія в історії атомної енергетики.",
+      "sources": [
+        { "type": "енциклопедія", "title": "Chernobyl disaster — Encyclopaedia Britannica", "url": "https://www.britannica.com/event/Chernobyl-disaster" },
+        { "type": "Вікіпедія", "title": "Chernobyl disaster — Wikipedia", "url": "https://en.wikipedia.org/wiki/Chernobyl_disaster" }
+      ]
+    },
+    {
+      "id": "independence-1991",
+      "title": "Акт проголошення незалежності України",
+      "text": "Після провалу путчу в Москві Верховна Рада УРСР ухвалює акт про незалежність. Його підтверджує всеукраїнський референдум у грудні.",
+      "from": 1991, "to": 1991,
+      "dateLabel": "24 серпня 1991 р.",
+      "fact": "Акт ухвалила Верховна Рада 24 серпня 1991 року. На референдумі 1 грудня 1991 року його підтримали понад 90 % учасників.",
+      "sources": [
+        { "type": "первинне джерело", "title": "Постанова Верховної Ради «Про проголошення незалежності України» (англ. текст), сайт Верховної Ради", "url": "https://static.rada.gov.ua/site/postanova_eng/Rres_Declaration_Independence_rev12.htm" },
+        { "type": "Вікіпедія", "title": "Declaration of Independence of Ukraine — Wikipedia", "url": "https://en.wikipedia.org/wiki/Declaration_of_Independence_of_Ukraine" }
+      ]
+    }
+  ]
+}
