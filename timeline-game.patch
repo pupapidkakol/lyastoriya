@@ -1,0 +1,480 @@
+diff --git a/public/css/games/timeline.css b/public/css/games/timeline.css
+new file mode 100644
+index 0000000..cfb5b22
+--- /dev/null
++++ b/public/css/games/timeline.css
+@@ -0,0 +1,60 @@
++/* Гра «Коли це сталося?» — стилі лише для цієї гри.
++   Використовують змінні з css/style.css (--accent, --line, --muted, …).
++   Підключаються самою грою (js/games/timeline.js), style.css не змінюється. */
++
++.tl-event{margin-bottom:28px}
++.tl-event h2{font-size:clamp(22px,3.4vw,28px);line-height:1.25;letter-spacing:-.01em;margin-bottom:10px}
++.tl-event p{color:var(--muted);font-size:15px}
++
++.tl-year{font:500 clamp(40px,9vw,56px)/1 var(--mono);color:var(--accent);text-align:center;margin:4px 0 12px;letter-spacing:-.02em}
++.tl-year small{display:block;font:400 11px/1.6 var(--mono);color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
++
++.tl-slider{position:relative;padding:6px 0 0}
++.tl-range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:32px;margin:0;background:transparent;cursor:pointer;touch-action:pan-y}
++.tl-range:disabled{cursor:default;opacity:.55}
++.tl-range::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--line)}
++.tl-range::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
++.tl-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
++.tl-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
++.tl-range:focus-visible{outline:none}
++.tl-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 1px var(--accent),0 0 0 5px rgba(169,240,229,.3)}
++.tl-range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px var(--accent),0 0 0 5px rgba(169,240,229,.3)}
++
++.tl-ticks{position:relative;height:20px;margin-top:2px}
++.tl-ticks span{position:absolute;top:0;transform:translateX(-50%);font:400 10px/1 var(--mono);color:var(--dim);white-space:nowrap}
++.tl-ticks span::before{content:"";position:absolute;left:50%;top:-6px;width:1px;height:4px;background:var(--line)}
++
++.tl-nudge{display:flex;justify-content:center;gap:8px;margin:14px 0 22px;flex-wrap:wrap}
++.tl-nudge .btn{height:34px;padding:0 12px;font:500 12px/1 var(--mono)}
++
++/* результат раунду */
++.tl-result{margin-top:4px;padding-top:20px;border-top:1px solid var(--line)}
++.tl-verdict{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
++.tl-verdict b{font-size:20px;font-weight:500}
++.tl-pts{font:500 13px/1 var(--mono);color:var(--accent);white-space:nowrap}
++.tl-pts.is-zero{color:#ff8f87}
++
++.tl-compare{position:relative;height:4px;border-radius:2px;background:var(--line);margin:44px 0 40px}
++.tl-band{position:absolute;top:0;height:100%;background:var(--accent);border-radius:2px;min-width:4px}
++.tl-gap{position:absolute;top:50%;height:2px;margin-top:-1px;background:#ff8f87;opacity:.6}
++.tl-mark{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);box-sizing:border-box}
++.tl-mark--right{background:var(--accent);border:3px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
++.tl-mark--guess{background:var(--card);border:2px solid #ff8f87}
++.tl-mark--guess.is-ok{border-color:var(--accent)}
++.tl-mark i{position:absolute;left:50%;transform:translateX(-50%);font:500 11px/1 var(--mono);font-style:normal;white-space:nowrap}
++.tl-mark--right i{top:22px;color:var(--accent)}
++.tl-mark--guess i{bottom:22px;color:var(--muted)}
++
++.tl-date{font:400 12px/1.6 var(--mono);color:var(--accent);margin-bottom:6px}
++.tl-fact{color:var(--muted);font-size:14px;margin-bottom:20px}
++
++.tl-recap{display:grid;gap:8px;margin:20px 0 4px}
++.tl-recap div{display:grid;grid-template-columns:1fr auto;gap:2px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:14px}
++.tl-recap b{font-weight:400}
++.tl-recap .tl-pts{align-self:center;grid-row:span 2;grid-column:2}
++.tl-recap small{color:var(--muted);font:400 12px/1.5 var(--mono)}
++.tl-rules{color:var(--dim);font-size:12px;margin-top:18px}
++
++@media (max-width:520px){
++  .tl-ticks span:nth-child(even){display:none} /* на вузьких екранах лишаємо кожну другу підпис */
++}
+diff --git a/public/data/timeline-events.json b/public/data/timeline-events.json
+new file mode 100644
+index 0000000..033c1b3
+--- /dev/null
++++ b/public/data/timeline-events.json
+@@ -0,0 +1,195 @@
++{
++  "meta": {
++    "min": 900,
++    "max": 2000,
++    "note": "from/to — допустимий діапазон правильної відповіді (роки). Якщо подію датують однозначно, from == to."
++  },
++  "events": [
++    {
++      "id": "baptism-rus",
++      "title": "Хрещення Русі",
++      "text": "Київський князь Володимир Святославич приймає християнство й охрещує киян. Нова віра стає офіційною для держави.",
++      "from": 988, "to": 989,
++      "dateLabel": "988 р. (за літописом; у науці також 988–989)",
++      "fact": "Традиційна дата — 988 рік за «Повістю врем’яних літ». В Encyclopedia of Ukraine вказано 988–989 роки, тож зараховуємо обидва. Християнізація була тривалим процесом: княгиня Ольга хрестилася ще раніше.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Christianization of Ukraine — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/c/h/christianizationofukraine.htm" },
++        { "type": "стаття", "title": "Затилюк Я. Хрещення Русі князем Володимиром: конструювання історичної оповіді. Український історичний журнал, 2014, №1", "url": "https://nasu-periodicals.org.ua/index.php/uhj/article/download/29365/23456/46401" }
++      ]
++    },
++    {
++      "id": "ukraina-1187",
++      "title": "Перша літописна згадка слова «Україна»",
++      "text": "У літописі розповідається про смерть переяславського князя Володимира Глібовича. Поруч із цим з’являється слово, яке пізніше стане назвою нашої країни.",
++      "from": 1187, "to": 1187,
++      "dateLabel": "бл. 1187 р.",
++      "fact": "Це Київський літопис, що входить до Іпатіївського. Тоді «Україна» означала південні прикордонні землі Русі, а не всю сучасну державу.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Kyiv Chronicle — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CK%5CY%5CKyivChronicle.htm" },
++        { "type": "Вікіпедія", "title": "Name of Ukraine — Wikipedia", "url": "https://en.wikipedia.org/wiki/Name_of_Ukraine" }
++      ]
++    },
++    {
++      "id": "kyiv-1240",
++      "title": "Облога й руйнування Києва військом Батия",
++      "text": "Монгольське військо штурмує Київ. Оборону очолює воєвода Дмитро. Після облоги місто, колишня столиця Русі, лежить у руїнах.",
++      "from": 1240, "to": 1240,
++      "dateLabel": "листопад–грудень 1240 р.",
++      "fact": "За Encyclopedia of Ukraine, Батий узяв Київ і влаштував різанину 6 грудня 1240 року. Дослідники сперечаються про точний день падіння міста (19 листопада або 6 грудня), але рік не викликає сумнівів.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Tatars — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CT%5CA%5CTatars.htm" },
++        { "type": "енциклопедія", "title": "Batu Khan — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CB%5CA%5CBatuKhan.htm" },
++        { "type": "стаття", "title": "Maiorov O. The Mongolian Capture of Kiev: The Two Dates", "url": "https://chtyvo.org.ua/authors/Maiorov_Oleksandr/The_Mongolian_Capture_of_Kiev_The_Two_Dates_anhl.pdf" },
++        { "type": "Вікіпедія", "title": "Siege of Kiev (1240) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Siege_of_Kiev_(1240)" }
++      ]
++    },
++    {
++      "id": "lviv-1256",
++      "title": "Перша літописна згадка про Львів",
++      "text": "У Галицько-Волинському літописі вперше з’являється місто, яке, за традицією, князь Данило назвав на честь сина Лева.",
++      "from": 1256, "to": 1256,
++      "dateLabel": "1256 р.",
++      "fact": "Найчастіше засновником міста вважають Данила Галицького, а 1256 рік — датою першої письмової згадки. Столицею Галицько-Волинської держави Львів зробив уже Лев Данилович.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Lev Danylovych — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CL%5CE%5CLevDanylovych.htm" },
++        { "type": "енциклопедія", "title": "Lviv — Britannica Kids", "url": "https://kids.britannica.com/students/article/Lviv/315664" },
++        { "type": "Вікіпедія", "title": "History of Lviv — Wikipedia", "url": "https://en.wikipedia.org/wiki/History_of_Lviv" }
++      ]
++    },
++    {
++      "id": "lublin-1569",
++      "title": "Люблінська унія",
++      "text": "Королівство Польське й Велике князівство Литовське об’єднуються в одну державу — Річ Посполиту. Київщина, Волинь та інші українські землі переходять під польську корону.",
++      "from": 1569, "to": 1569,
++      "dateLabel": "1 липня 1569 р.",
++      "fact": "Акт унії підписали в Люблині 1 липня 1569 року. Для українських земель це означало входження до складу Польщі, що змінило їхнє політичне й релігійне життя.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Lublin, Union of — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/L/U/LublinUnionof.htm" },
++        { "type": "енциклопедія", "title": "Lublin, Union of (1569) — Encyclopedia.com", "url": "https://www.encyclopedia.com/history/encyclopedias-almanacs-transcripts-and-maps/lublin-union-1569" }
++      ]
++    },
++    {
++      "id": "khmelnytsky-1648",
++      "title": "Початок повстання Богдана Хмельницького",
++      "text": "Запорозькі козаки на чолі з Хмельницьким виступають проти Речі Посполитої. Починається велика війна, яка змінить карту України.",
++      "from": 1648, "to": 1648,
++      "dateLabel": "1648 р. (початок — січень)",
++      "fact": "Повстання почалося на Запоріжжі на початку 1648 року. Воно переросло в загальнонаціональну війну, внаслідок якої виникла козацька держава — Гетьманщина.",
++      "sources": [
++        { "type": "Вікіпедія", "title": "Khmelnytsky Uprising — Wikipedia", "url": "https://en.wikipedia.org/wiki/Khmelnytsky_Uprising" },
++        { "type": "Вікіпедія", "title": "Pereiaslav Agreement (розділ про передісторію) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Pereiaslav_Agreement" }
++      ]
++    },
++    {
++      "id": "pereiaslav-1654",
++      "title": "Переяславська рада",
++      "text": "Гетьман Хмельницький і козацька старшина присягають московському цареві Олексію Михайловичу. Що саме означала ця угода, історики сперечаються досі.",
++      "from": 1654, "to": 1654,
++      "dateLabel": "18 січня 1654 р. (н. ст.)",
++      "fact": "Присягу склали в Переяславі в січні 1654 року, а текст «Березневих статей» остаточно погодили в Москві пізніше того ж року. Тлумачення угоди — одна з найгостріших дискусій в історіографії.",
++      "sources": [
++        { "type": "Вікіпедія", "title": "Pereiaslav Agreement — Wikipedia", "url": "https://en.wikipedia.org/wiki/Pereiaslav_Agreement" },
++        { "type": "рецензія", "title": "Basarab J. Pereiaslav 1654: A Historiographical Study (рецензія, CBRA)", "url": "https://cbra.library.utoronto.ca/items/show/38795" }
++      ]
++    },
++    {
++      "id": "orlyk-1710",
++      "title": "Конституція Пилипа Орлика",
++      "text": "У вигнанні, в місті Бендери, новообраний гетьман укладає з козацькою старшиною документ. Він обмежує владу гетьмана й створює козацький парламент. Його називають першою конституцією України.",
++      "from": 1710, "to": 1710,
++      "dateLabel": "5 (16) квітня 1710 р.",
++      "fact": "Документ має 16 статей і преамбулу. Дата 5 квітня — за старим стилем, 16 квітня — за новим, обидві дати стосуються одного дня 1710 року.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Bendery, Constitution of — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/B/E/BenderyConstitutionof.htm" },
++        { "type": "Вікіпедія", "title": "Constitution of Pylyp Orlyk — Wikipedia", "url": "https://en.wikipedia.org/wiki/Constitution_of_Pylyp_Orlyk" }
++      ]
++    },
++    {
++      "id": "sich-1775",
++      "title": "Зруйнування Запорозької Січі",
++      "text": "Російське військо за наказом імператриці Катерини ІІ оточує Нову (Підпільненську) Січ і знищує останній осередок козацької вольниці.",
++      "from": 1775, "to": 1775,
++      "dateLabel": "15–16 червня 1775 р.",
++      "fact": "Нову Січ зруйнував російський корпус генерала Текелі. У маніфесті Катерина ІІ офіційно скасувала Запорозьке військо.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Zaporozhian Sich — Encyclopedia of Ukraine", "url": "https://encyclopediaofukraine.com/pages%5CZ%5CA%5CZaporozhianSich.htm" },
++        { "type": "енциклопедія", "title": "Zaporizhia, The — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CZ%5CA%5CZaporizhiaThe.htm" },
++        { "type": "Вікіпедія", "title": "Liquidation of the Zaporozhian Sich — Wikipedia", "url": "https://en.wikipedia.org/wiki/Liquidation_of_the_Zaporozhian_Sich" }
++      ]
++    },
++    {
++      "id": "kobzar-1840",
++      "title": "Вихід першого «Кобзаря» Тараса Шевченка",
++      "text": "У Петербурзі виходить тоненька збірка з кількох поезій молодого автора. Вона відкриває нову добу в українській літературі.",
++      "from": 1840, "to": 1840,
++      "dateLabel": "1840 р.",
++      "fact": "Перше видання «Кобзаря» містило вісім творів, його надрукували в Петербурзі. Згодом назву «Кобзар» почали застосовувати до всієї поетичної спадщини Шевченка.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Kobzar — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CK%5CO%5CKobzarIT.htm" },
++        { "type": "Вікіпедія", "title": "Kobzar (poetry collection) — Wikipedia", "url": "https://en.wikipedia.org/wiki/Kobzar_(poetry_collection)" },
++        { "type": "енциклопедія", "title": "Kobzar — Taras Shevchenko: Encyclopedia of the life and works", "url": "https://t-shevchenko.name/en/Kobzar.html" }
++      ]
++    },
++    {
++      "id": "rada-1917",
++      "title": "Створення Української Центральної Ради",
++      "text": "Після повалення царя в Росії українські партії й організації об’єднуються в Києві. Очолює новий орган історик Михайло Грушевський.",
++      "from": 1917, "to": 1917,
++      "dateLabel": "17 березня 1917 р. (н. ст.)",
++      "fact": "Центральну Раду створили в Києві 17 березня 1917 року (4 березня за ст. ст.). Згодом вона проголосила автономію, а потім незалежність УНР.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Central Rada — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CC%5CE%5CCentralRada.htm" },
++        { "type": "енциклопедія", "title": "Society of Ukrainian Progressives — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages%5CS%5CO%5CSocietyofUkrainianProgressives.htm" },
++        { "type": "Вікіпедія", "title": "Central Rada — Wikipedia", "url": "https://en.wikipedia.org/wiki/Central_Rada" }
++      ]
++    },
++    {
++      "id": "zluka-1919",
++      "title": "Акт Злуки УНР і ЗУНР",
++      "text": "На Софійській площі в Києві урочисто проголошують об’єднання Української Народної Республіки та Західноукраїнської Народної Республіки. Сьогодні цей день — державне свято, День Соборності.",
++      "from": 1919, "to": 1919,
++      "dateLabel": "22 січня 1919 р.",
++      "fact": "Універсал Директорії УНР проголосили 22 січня 1919 року. Об’єднання було значною мірою символічним: обидві держави зберігали власні армії й адміністрації.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Struggle for independence (1917–1921) — Encyclopedia of Ukraine", "url": "https://www.encyclopediaofukraine.com/pages/S/T/StruggleforIndependence1917hD720.htm" },
++        { "type": "Вікіпедія", "title": "Unification Act — Wikipedia", "url": "https://en.wikipedia.org/wiki/Unification_Act" }
++      ]
++    },
++    {
++      "id": "holodomor",
++      "title": "Голодомор",
++      "text": "Штучний голод, спричинений політикою радянської влади, забирає життя мільйонів людей у селах Радянської України. Пік смертності припадає на весну.",
++      "from": 1932, "to": 1933,
++      "dateLabel": "1932–1933 рр.",
++      "fact": "Голодомор тривав у 1932–1933 роках, найбільше жертв було навесні 1933-го. Кількість загиблих історики оцінюють по-різному; у всіх оцінках ідеться про мільйони людей.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Holodomor — Encyclopaedia Britannica", "url": "https://www.britannica.com/event/Holodomor" },
++        { "type": "Вікіпедія", "title": "Holodomor — Wikipedia", "url": "https://en.wikipedia.org/wiki/Holodomor" }
++      ]
++    },
++    {
++      "id": "chornobyl-1986",
++      "title": "Аварія на Чорнобильській АЕС",
++      "text": "Вибухає четвертий енергоблок станції поблизу Прип’яті. Радіоактивні викиди змушують евакуювати десятки тисяч людей і створюють зону відчуження.",
++      "from": 1986, "to": 1986,
++      "dateLabel": "26 квітня 1986 р.",
++      "fact": "Вибух стався вночі 26 квітня 1986 року. Це найбільша аварія в історії атомної енергетики.",
++      "sources": [
++        { "type": "енциклопедія", "title": "Chernobyl disaster — Encyclopaedia Britannica", "url": "https://www.britannica.com/event/Chernobyl-disaster" },
++        { "type": "Вікіпедія", "title": "Chernobyl disaster — Wikipedia", "url": "https://en.wikipedia.org/wiki/Chernobyl_disaster" }
++      ]
++    },
++    {
++      "id": "independence-1991",
++      "title": "Акт проголошення незалежності України",
++      "text": "Після провалу путчу в Москві Верховна Рада УРСР ухвалює акт про незалежність. Його підтверджує всеукраїнський референдум у грудні.",
++      "from": 1991, "to": 1991,
++      "dateLabel": "24 серпня 1991 р.",
++      "fact": "Акт ухвалила Верховна Рада 24 серпня 1991 року. На референдумі 1 грудня 1991 року його підтримали понад 90 % учасників.",
++      "sources": [
++        { "type": "первинне джерело", "title": "Постанова Верховної Ради «Про проголошення незалежності України» (англ. текст), сайт Верховної Ради", "url": "https://static.rada.gov.ua/site/postanova_eng/Rres_Declaration_Independence_rev12.htm" },
++        { "type": "Вікіпедія", "title": "Declaration of Independence of Ukraine — Wikipedia", "url": "https://en.wikipedia.org/wiki/Declaration_of_Independence_of_Ukraine" }
++      ]
++    }
++  ]
++}
+diff --git a/public/js/game-page.js b/public/js/game-page.js
+index d6d21bb..191a410 100644
+--- a/public/js/game-page.js
++++ b/public/js/game-page.js
+@@ -1,7 +1,7 @@
+ // Завантажувач ігор. Кожна гра — файл js/games/<id>.js, що реєструє Games[id] = { mount(root) }.
+ window.Games = {};
+ (function () {
+-  var REGISTRY = { 'fake-or-fact': 'Фейк чи факт', 'chronology': 'На шляху до свободи' }; // білий список: у src підставляємо лише ці id
++  var REGISTRY = { 'fake-or-fact': 'Фейк чи факт', 'chronology': 'На шляху до свободи', 'timeline': 'Коли це сталося?' }; // білий список: у src підставляємо лише ці id
+   var id = new URLSearchParams(location.search).get('g') || '';
+   var root = document.getElementById('gameRoot');
+   if (!Object.prototype.hasOwnProperty.call(REGISTRY, id)) { root.textContent = 'Таку гру не знайдено.'; return; }
+diff --git a/public/js/games/timeline.js b/public/js/games/timeline.js
+new file mode 100644
+index 0000000..15927ce
+--- /dev/null
++++ b/public/js/games/timeline.js
+@@ -0,0 +1,181 @@
++// Гра «Коли це сталося?»: показуємо подію — користувач повзунком вгадує рік.
++// Підключення: game.html?g=timeline (id треба додати в REGISTRY у js/game-page.js і в GAMES у server/server.js).
++// Дані подій і джерела: data/timeline-events.json. Стилі: css/games/timeline.css (підвантажуються тут же).
++(function () {
++  var ROUNDS = 5, PTS = 20, MAX = ROUNDS * PTS;   // MAX = 100 — сервер приймає total ≤ 100
++  var FULL_TOL = 2;     // помилка ≤ 2 роки — повні бали
++  var ZERO_AT = 100;    // помилка ≥ 100 років — 0 балів, між ними — лінійно
++  var THUMB = 24;       // ширина «бігунка» в px (для вирівнювання підписів зі шкалою)
++  var DATA_URL = 'data/timeline-events.json', CSS_URL = 'css/games/timeline.css';
++
++  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
++  function btn(label, cls, fn) { var b = el('button', 'btn ' + cls, label); b.type = 'button'; b.addEventListener('click', fn); return b; }
++  function sample(arr, n) {
++    var a = arr.slice(), r = new Uint32Array(1), i, j, t;
++    for (i = a.length - 1; i > 0; i--) { crypto.getRandomValues(r); j = r[0] % (i + 1); t = a[i]; a[i] = a[j]; a[j] = t; }
++    return a.slice(0, n);
++  }
++  function plural(n) { var m10 = n % 10, m100 = n % 100; return (m10 === 1 && m100 !== 11) ? 'рік' : (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) ? 'роки' : 'років'; }
++  function yearsText(n) { return n + ' ' + plural(n); }
++  function distance(ev, year) { return year < ev.from ? ev.from - year : year > ev.to ? year - ev.to : 0; }
++  function points(err) { return err <= FULL_TOL ? PTS : Math.max(0, Math.round(PTS * (ZERO_AT - err) / (ZERO_AT - FULL_TOL))); }
++  function addCss() {
++    if (document.querySelector('link[data-game-css="timeline"]')) return;
++    var l = el('link'); l.rel = 'stylesheet'; l.href = CSS_URL; l.setAttribute('data-game-css', 'timeline'); document.head.appendChild(l);
++  }
++
++  window.Games['timeline'] = {
++    mount: function (root) {
++      addCss();
++      var panel = el('div', 'panel');
++      root.appendChild(panel);
++      panel.appendChild(el('p', 'hint', 'Завантажуємо події…'));
++
++      fetch(DATA_URL, { credentials: 'same-origin' })
++        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
++        .then(function (d) {
++          if (!d || !d.meta || !Array.isArray(d.events) || d.events.length < ROUNDS) throw new Error('bad data');
++          start(d.meta, d.events);
++        })
++        .catch(function () { panel.textContent = ''; panel.appendChild(el('p', 'q-text', 'Не вдалося завантажити події. Оновіть сторінку.')); });
++
++      function start(meta, events) {
++        var MIN = meta.min, TOP = meta.max, SPAN = TOP - MIN;
++        var TICKS = [900, 1000, 1200, 1400, 1600, 1800, 2000].filter(function (y) { return y >= MIN && y <= TOP; });
++
++        function pct(year) { return (year - MIN) / SPAN; }
++        // позиція підпису; compensate=true — враховує, що центр бігунка не доходить до країв доріжки
++        function left(year, compensate) {
++          var p = pct(year);
++          return compensate ? 'calc(' + (p * 100) + '% + ' + ((0.5 - p) * THUMB) + 'px)' : (p * 100) + '%';
++        }
++        function ticks(compensate) {
++          var t = el('div', 'tl-ticks'); t.setAttribute('aria-hidden', 'true');
++          TICKS.forEach(function (y) { var s = el('span', null, String(y)); s.style.left = left(y, compensate); t.appendChild(s); });
++          return t;
++        }
++
++        function intro() {
++          panel.textContent = '';
++          panel.append(
++            el('p', 'q-text', 'Прочитай подію й постав повзунок на рік, коли вона сталася.'),
++            el('p', 'hint', ROUNDS + ' подій з історії України. Чим ближче до правильного року — тим більше балів: помилка до ' + FULL_TOL + ' років дає повні ' + PTS + ', а від ' + ZERO_AT + ' років — нуль. Максимум — ' + MAX + '.'),
++            btn('Почати', 'btn--accent', play)
++          );
++        }
++
++        function play() {
++          var round = 0, total = 0, log = [], evs = sample(events, ROUNDS);
++
++          function nextRound() {
++            var ev = evs[round], value = Math.round((MIN + TOP) / 2);
++            panel.textContent = '';
++
++            var bar = el('div', 'bar'), fill = el('i'); fill.style.width = (round / ROUNDS * 100) + '%'; bar.appendChild(fill);
++            var meta1 = el('div', 'q-meta');
++            meta1.append(el('span', null, 'Подія ' + (round + 1) + ' / ' + ROUNDS), el('span', null, 'Бали: ' + total));
++
++            var card = el('div', 'tl-event');
++            card.append(el('h2', null, ev.title), el('p', null, ev.text));
++
++            var yearBox = el('div', 'tl-year'), yearNum = el('span', null, String(value));
++            yearBox.append(yearNum, el('small', null, 'обраний рік'));
++
++            var range = el('input', 'tl-range');
++            range.type = 'range'; range.min = MIN; range.max = TOP; range.step = 1; range.value = value;
++            range.setAttribute('aria-label', 'Рік події');
++            var slider = el('div', 'tl-slider');
++            slider.append(range, ticks(true));
++
++            function setValue(v) {
++              value = Math.max(MIN, Math.min(TOP, v));
++              range.value = value; yearNum.textContent = String(value);
++            }
++            range.addEventListener('input', function () { setValue(parseInt(range.value, 10)); });
++
++            var nudge = el('div', 'tl-nudge'), nudgeBtns = [];
++            [-10, -1, 1, 10].forEach(function (d) {
++              var b = btn((d > 0 ? '+' : '−') + Math.abs(d), 'btn--ghost', function () { setValue(value + d); });
++              b.setAttribute('aria-label', (d > 0 ? 'Збільшити' : 'Зменшити') + ' рік на ' + yearsText(Math.abs(d)));
++              nudgeBtns.push(b); nudge.appendChild(b);
++            });
++
++            var resultBox = el('div'); resultBox.setAttribute('aria-live', 'polite');
++            var ok = btn('Підтвердити', 'btn--accent', function () {
++              var err = distance(ev, value), pts = points(err);
++              total += pts; log.push({ ev: ev, guess: value, err: err, pts: pts });
++              range.disabled = true; nudgeBtns.forEach(function (b) { b.disabled = true; }); ok.remove();
++              meta1.lastChild.textContent = 'Бали: ' + total;
++              reveal(resultBox, ev, value, err, pts);
++            });
++
++            panel.append(bar, meta1, card, yearBox, slider, nudge, ok, resultBox);
++            range.focus({ preventScroll: true });
++          }
++
++          function reveal(box, ev, guess, err, pts) {
++            var res = el('div', 'tl-result');
++            var verdict = el('div', 'tl-verdict');
++            var title = err === 0 ? (ev.from === ev.to ? 'Точно в ціль!' : 'Влучно!') : err <= FULL_TOL ? 'Майже ідеально — ' + yearsText(err) + ' різниці' : 'Помилка: ' + yearsText(err);
++            var ptsEl = el('span', 'tl-pts' + (pts === 0 ? ' is-zero' : ''), '+' + pts + ' / ' + PTS);
++            verdict.append(el('b', null, title), ptsEl);
++
++            // шкала порівняння: правильна відповідь і вибір гравця
++            var cmp = el('div', 'tl-compare'), p1 = pct(ev.from) * 100, p2 = pct(ev.to) * 100, pg = pct(guess) * 100;
++            var band = el('span', 'tl-band'); band.style.left = p1 + '%'; band.style.width = (p2 - p1) + '%';
++            cmp.appendChild(band);
++            if (err > 0) {
++              var near = guess < ev.from ? ev.from : ev.to, gap = el('span', 'tl-gap');
++              gap.style.left = Math.min(pg, pct(near) * 100) + '%'; gap.style.width = Math.abs(pg - pct(near) * 100) + '%';
++              cmp.appendChild(gap);
++            }
++            var right = el('span', 'tl-mark tl-mark--right'), rl = ev.from === ev.to ? String(ev.from) : ev.from + '–' + ev.to;
++            right.style.left = ((p1 + p2) / 2) + '%'; right.appendChild(el('i', null, rl));
++            var g = el('span', 'tl-mark tl-mark--guess' + (err === 0 ? ' is-ok' : '')); g.style.left = pg + '%'; g.appendChild(el('i', null, String(guess)));
++            cmp.append(right, g);
++
++            var last = round === ROUNDS - 1;
++            var next = btn(last ? 'Результат' : 'Наступна подія', 'btn--accent', function () { round++; last ? finish() : nextRound(); });
++            res.append(verdict, cmp, ev.dateLabel ? el('p', 'tl-date', ev.dateLabel) : document.createDocumentFragment(), el('p', 'tl-fact', ev.fact), next);
++            box.appendChild(res);
++            next.focus();
++          }
++
++          function finish() {
++            var status = el('p', 'hint', 'Зберігаємо результат…');
++            panel.textContent = '';
++            var recap = el('div', 'tl-recap');
++            log.forEach(function (r) {
++              var row = el('div');
++              row.append(
++                el('b', null, r.ev.title),
++                el('span', 'tl-pts' + (r.pts === 0 ? ' is-zero' : ''), '+' + r.pts),
++                el('small', null, 'Твоя відповідь: ' + r.guess + ' · Правильно: ' + (r.ev.from === r.ev.to ? r.ev.from : r.ev.from + '–' + r.ev.to))
++              );
++              recap.appendChild(row);
++            });
++            panel.append(
++              el('p', 'big', total + ' / ' + MAX),
++              el('p', 'q-text', total >= 90 ? 'Блискуче відчуття часу.' : total >= 60 ? 'Добре орієнтуєшся в епохах.' : 'Варто більше потренуватися. Спробуй ще раз.'),
++              recap,
++              status,
++              btn('Грати ще', 'btn--accent', play),
++              el('p', 'tl-rules', 'Помилка до ' + FULL_TOL + ' років — повні бали, від ' + ZERO_AT + ' років — нуль, між ними пропорційно.')
++            );
++            api.saveResult({ game: 'timeline', score: total, total: MAX }).then(function () {
++              status.textContent = 'Результат збережено у твоєму профілі.';
++            }).catch(function (e) {
++              if (e.status === 401) {
++                status.textContent = 'Увійди в акаунт, щоб зберігати результати. ';
++                var a = el('a', 'link', 'Увійти'); a.href = 'auth.html#login'; status.appendChild(a);
++              } else status.textContent = 'Результат не збережено — сервер недоступний.';
++            });
++          }
++
++          nextRound();
++        }
++        intro();
++      }
++    }
++  };
++})();
+diff --git a/server/server.js b/server/server.js
+index 348f7f7..d194e89 100644
+--- a/server/server.js
++++ b/server/server.js
+@@ -6,7 +6,7 @@ const { DatabaseSync } = require('node:sqlite'); // вбудована в Node 
+ const PROD = process.env.NODE_ENV === 'production';
+ const PORT = process.env.PORT || 3000;
+ const SESSION_TTL = 7 * 24 * 3600 * 1000;
+-const GAMES = ['fake-or-fact', 'chronology'];
++const GAMES = ['fake-or-fact', 'chronology', 'timeline'];
+ 
+ // ---- База даних (SQLite, лише параметризовані запити) ----
+ fs.mkdirSync(path.join(__dirname, 'data'), { recursive: true });

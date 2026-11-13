@@ -1,0 +1,60 @@
+/* Гра «Коли це сталося?» — стилі лише для цієї гри.
+   Використовують змінні з css/style.css (--accent, --line, --muted, …).
+   Підключаються самою грою (js/games/timeline.js), style.css не змінюється. */
+
+.tl-event{margin-bottom:28px}
+.tl-event h2{font-size:clamp(22px,3.4vw,28px);line-height:1.25;letter-spacing:-.01em;margin-bottom:10px}
+.tl-event p{color:var(--muted);font-size:15px}
+
+.tl-year{font:500 clamp(40px,9vw,56px)/1 var(--mono);color:var(--accent);text-align:center;margin:4px 0 12px;letter-spacing:-.02em}
+.tl-year small{display:block;font:400 11px/1.6 var(--mono);color:var(--dim);letter-spacing:.14em;text-transform:uppercase;margin-top:6px}
+
+.tl-slider{position:relative;padding:6px 0 0}
+.tl-range{-webkit-appearance:none;appearance:none;display:block;width:100%;height:32px;margin:0;background:transparent;cursor:pointer;touch-action:pan-y}
+.tl-range:disabled{cursor:default;opacity:.55}
+.tl-range::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:var(--line)}
+.tl-range::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
+.tl-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
+.tl-range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);border:4px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
+.tl-range:focus-visible{outline:none}
+.tl-range:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 1px var(--accent),0 0 0 5px rgba(169,240,229,.3)}
+.tl-range:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px var(--accent),0 0 0 5px rgba(169,240,229,.3)}
+
+.tl-ticks{position:relative;height:20px;margin-top:2px}
+.tl-ticks span{position:absolute;top:0;transform:translateX(-50%);font:400 10px/1 var(--mono);color:var(--dim);white-space:nowrap}
+.tl-ticks span::before{content:"";position:absolute;left:50%;top:-6px;width:1px;height:4px;background:var(--line)}
+
+.tl-nudge{display:flex;justify-content:center;gap:8px;margin:14px 0 22px;flex-wrap:wrap}
+.tl-nudge .btn{height:34px;padding:0 12px;font:500 12px/1 var(--mono)}
+
+/* результат раунду */
+.tl-result{margin-top:4px;padding-top:20px;border-top:1px solid var(--line)}
+.tl-verdict{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.tl-verdict b{font-size:20px;font-weight:500}
+.tl-pts{font:500 13px/1 var(--mono);color:var(--accent);white-space:nowrap}
+.tl-pts.is-zero{color:#ff8f87}
+
+.tl-compare{position:relative;height:4px;border-radius:2px;background:var(--line);margin:44px 0 40px}
+.tl-band{position:absolute;top:0;height:100%;background:var(--accent);border-radius:2px;min-width:4px}
+.tl-gap{position:absolute;top:50%;height:2px;margin-top:-1px;background:#ff8f87;opacity:.6}
+.tl-mark{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;transform:translate(-50%,-50%);box-sizing:border-box}
+.tl-mark--right{background:var(--accent);border:3px solid var(--card);box-shadow:0 0 0 1px var(--accent)}
+.tl-mark--guess{background:var(--card);border:2px solid #ff8f87}
+.tl-mark--guess.is-ok{border-color:var(--accent)}
+.tl-mark i{position:absolute;left:50%;transform:translateX(-50%);font:500 11px/1 var(--mono);font-style:normal;white-space:nowrap}
+.tl-mark--right i{top:22px;color:var(--accent)}
+.tl-mark--guess i{bottom:22px;color:var(--muted)}
+
+.tl-date{font:400 12px/1.6 var(--mono);color:var(--accent);margin-bottom:6px}
+.tl-fact{color:var(--muted);font-size:14px;margin-bottom:20px}
+
+.tl-recap{display:grid;gap:8px;margin:20px 0 4px}
+.tl-recap div{display:grid;grid-template-columns:1fr auto;gap:2px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;font-size:14px}
+.tl-recap b{font-weight:400}
+.tl-recap .tl-pts{align-self:center;grid-row:span 2;grid-column:2}
+.tl-recap small{color:var(--muted);font:400 12px/1.5 var(--mono)}
+.tl-rules{color:var(--dim);font-size:12px;margin-top:18px}
+
+@media (max-width:520px){
+  .tl-ticks span:nth-child(even){display:none} /* на вузьких екранах лишаємо кожну другу підпис */
+}
