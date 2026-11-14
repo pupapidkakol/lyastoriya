@@ -1,0 +1,51 @@
+/* ЛяСторія — дизайн-токени (шрифти та кольори).
+   Єдине джерело правди: тут. Опис і правила використання — у data/readme.md.
+   Підключення на кожній сторінці ПЕРЕД css/style.css:
+     <link rel="stylesheet" href="tokens.css">
+   Шрифти (Inter, JetBrains Mono) підтягуються звідси ж — у HTML їх окремо підключати не треба. */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* ---------- Шрифти ---------- */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  /* ---------- Бренд ---------- */
+  --color-purple:       #46178f;  /* основний: hero, панелі гри, посилання, акценти */
+  --color-purple-deep:  #331067;  /* темні секції: «Результати» */
+  --color-ink:          #251442;  /* основний текст, заголовки */
+  --color-white:        #ffffff;
+
+  /* ---------- Дії та акценти ---------- */
+  --color-yellow:       #ffc00a;  /* головна CTA на фіолетовому */
+  --color-yellow-bright:#ffe500;  /* CTA на фіолетовій панелі гри */
+  --color-green:        #268014;  /* картка «Хронологічний виклик», прогрес */
+  --color-green-btn:    #378a27;  /* кнопка «Зареєструватися» */
+  --color-lime:         #7bdc67;  /* картка «Історична хронологія» */
+  --color-red:          #e21b3c;  /* картка «Історичний квіз», помилка */
+  --color-blue:         #1368ce;  /* картка «Знайди відповідність», інфо */
+
+  /* ---------- Нейтральні ---------- */
+  --color-gray:         #f2f2f2;  /* фон сірих секцій */
+  --color-tint:         #f7f5fa;  /* ледь фіолетовий фон рядків */
+  --color-line:         #e5e0ec;  /* бордери, роздільники */
+  --color-muted:        #625a70;  /* другорядний текст */
+  --color-muted-2:      #716683;  /* підписи, мітки */
+
+  /* ---------- Стани ---------- */
+  --color-ok-bg:        #edf6e9;  /* правильна відповідь */
+  --color-error-bg:     #fff1f3;  /* неправильна відповідь */
+  --color-info-bg:      #f1f5fd;  /* відповіді у «Знайди відповідність» */
+  --color-info-line:    #bcd0ef;
+
+  /* ---------- Тіні карток (нижня «ступінька») ---------- */
+  --color-red-shade:    #aa142d;
+  --color-blue-shade:   #0e51a3;
+  --color-green-shade:  #1b5f0f;
+  --color-lime-shade:   #62b551;
+
+  /* ---------- Форма ---------- */
+  --radius-sm: 2px;
+  --radius:    4px;
+}
