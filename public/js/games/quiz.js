@@ -45,7 +45,39 @@
             q.options.forEach((answer) => {
               answers.append(btn(answer.text, 'btn--ghost', () => { reply(q, answer, answers); }));
             });
-            panel.append(bar, meta, el('p', 'q-text', q.text), answers);
+            panel.append(bar, meta, el('p', 'q-text', q.text));
+            const image = q.image;
+            if (image && typeof image.file === 'string' && image.file && !/[\\/]/.test(image.file) && image.file !== '.' && image.file !== '..') {
+              const figure = el('figure', 'quiz-image');
+              const img = el('img');
+              img.src = 'images/' + encodeURIComponent(image.file);
+              img.alt = image.title || q.text;
+              img.loading = 'eager';
+              img.addEventListener('error', () => figure.remove());
+              figure.appendChild(img);
+
+              const creditParts = [image.author, image.license].filter(Boolean);
+              let imageUrl;
+              try {
+                imageUrl = new URL(image.url);
+              } catch (error) {
+                imageUrl = null;
+              }
+              if (creditParts.length || (imageUrl && (imageUrl.protocol === 'http:' || imageUrl.protocol === 'https:'))) {
+                const caption = el('figcaption', 'quiz-image__credit', creditParts.join(' · '));
+                if (imageUrl && (imageUrl.protocol === 'http:' || imageUrl.protocol === 'https:')) {
+                  if (creditParts.length) caption.append(el('span', null, ' · '));
+                  const link = el('a', 'link', 'Джерело зображення');
+                  link.href = imageUrl.href;
+                  link.target = '_blank';
+                  link.rel = 'noopener noreferrer';
+                  caption.append(link);
+                }
+                figure.appendChild(caption);
+              }
+              panel.appendChild(figure);
+            }
+            panel.appendChild(answers);
 
           }
 

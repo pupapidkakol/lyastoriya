@@ -7,11 +7,7 @@
   <title>ЛяСторія — історія України через ігри</title>
   <meta name="description"
     content="Відкривай історію України через ігри, досліджуй ключові події та бач, як зростають твої знання.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -33,6 +29,7 @@
   </header>
 
   <main>
+    <div class="hero-band">
     <section class="hero container">
       <div class="hero__text">
         <p class="label"><span class="dot"></span>Історія України. Твоя нова перспектива.</p>
@@ -54,9 +51,9 @@
         </figcaption>
       </figure>
     </section>
+    </div>
 
     <section class="container epochs" aria-label="Епохи">
-      <div class="epochs__head"><span>Обери свій час</span><span>Від витоків до сьогодення →</span></div>
       <ul class="epochs__list">
         <li class="is-active"><button type="button"><small>IX–XIII ст.</small>Русь-Україна</button></li>
         <li><button type="button"><small>XVI–XVIII ст.</small>Козацька доба</button></li>
@@ -75,44 +72,36 @@
         <a href="#" class="link">Усі ігри →</a>
       </div>
       <div class="grid-3">
-        <article class="card">
-          <div class="card__img"><img src="images/kyiv.jpg" alt=""><span class="tag">IX–XIII ст.</span></div>
+        <article class="card card--red">
+          <div class="card__img"><img src="images/kyiv.jpg" alt=""></div>
           <div class="card__body">
-            <p class="card__meta"><span class="accent">Історичний квіз</span><span>7 хв</span></p>
-            <h3>Київ крізь століття</h3>
+            <h3>Історичний квіз</h3>
             <p>Впізнавай пам’ятки й відкривай історію міста, що стало серцем Русі.</p>
-            <div class="card__foot"><span>Середній рівень</span><a href="game.html?g=quiz" class="accent">Грати
-                ↗</a></div>
+            <div class="card__foot"><a href="game.html?g=quiz">Грати <span aria-hidden="true">↗</span></a></div>
           </div>
         </article>
-        <article class="card">
-          <div class="card__img"><img src="images/cossacks.jpg" alt=""><span class="tag">XVI–XVIII ст.</span></div>
+        <article class="card card--blue">
+          <div class="card__img"><img src="images/cossacks.jpg" alt=""></div>
           <div class="card__body">
-            <p class="card__meta"><span class="accent">Знайди відповідність</span><span>10 хв</span></p>
-            <h3>Код козацької доби</h3>
+            <h3>Знайди відповідність</h3>
             <p>Поєднуй імена, події та дати. Розгадай, як творилася Гетьманщина.</p>
-            <div class="card__foot"><span>Середній рівень</span><a href="game.html?g=matching-task" class="accent">Грати
-                ↗</a></div>
+            <div class="card__foot"><a href="game.html?g=matching-task">Грати <span aria-hidden="true">↗</span></a></div>
           </div>
         </article>
-        <article class="card">
-          <div class="card__img"><img src="images/revolution.jpg" alt=""><span class="tag">1917–1921</span></div>
+        <article class="card card--green">
+          <div class="card__img"><img src="images/revolution.jpg" alt=""></div>
           <div class="card__body">
-            <p class="card__meta"><span class="accent">Хронологічний виклик</span><span>8 хв</span></p>
-            <h3>На шляху до свободи</h3>
+            <h3>Хронологічний виклик</h3>
             <p>Віднови послідовність подій Української революції 1917–1921 років.</p>
-            <div class="card__foot"><span>Середній рівень</span><a href="game.html?g=chronology" class="accent">Грати
-                ↗</a></div>
+            <div class="card__foot"><a href="game.html?g=chronology">Грати <span aria-hidden="true">↗</span></a></div>
           </div>
         </article>
-        <article class="card">
-          <div class="card__img"><span class="tag">Усі епохи</span></div>
+        <article class="card card--lime">
+          <div class="card__img"><img src="images/kyiv.jpg" alt=""></div>
           <div class="card__body">
-            <p class="card__meta"><span class="accent">Швидка гра</span><span>5 хв</span></p>
-            <h3>Фейк чи факт</h3>
-            <p>Десять тверджень з історії України. Відділи правду від міфів.</p>
-            <div class="card__foot"><span>Початковий рівень</span><a href="game.html?g=fake-or-fact"
-                class="accent">Грати ↗</a></div>
+            <h3>Історична хронологія</h3>
+            <p>Розташуй події в часі й віднови послідовність історії України.</p>
+            <div class="card__foot"><a href="game.html?g=timeline">Грати <span aria-hidden="true">↗</span></a></div>
           </div>
         </article>
       </div>
@@ -150,7 +139,8 @@
       </div>
     </section>
 
-    <section class="section container results" id="results">
+    <div class="results-band" id="results">
+    <section class="container results">
       <div>
         <p class="label">03 / Результати</p>
         <h2>Твій шлях в історії<br>починається тут.</h2>
@@ -173,6 +163,7 @@
         <p class="progress__next" data-example>Наступне відкриття — Пилип Орлик і його Конституція</p>
       </aside>
     </section>
+    </div>
   </main>
 
   <footer class="container footer">
@@ -185,7 +176,7 @@
     </div>
     <div class="footer__bottom">
       <span>© <span id="year">2026</span> ЛяСторія. Створено з цікавістю до історії.</span>
-      <span><a href="#">Політика конфіденційності</a><a href="#">Зв’язатися з нами ↗</a></span>
+      <span><a href="#">Політика конфіденційності</a><a href="#">Підтримка ↗</a></span>
     </div>
   </footer>
 
