@@ -4,11 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
   <link rel="stylesheet" href="css/style.css">
   <title>Гра — ЛяСторія</title>
 </head>
@@ -25,12 +21,36 @@
       </div>
     </div>
   </header>
-  <!-- Шаблон гри: game.html?g=<id>. Додати нову гру = додати файл js/games/<id>.js і id у js/game-page.js -->
-  <main class="container game">
-    <a href="index.html#games" class="back">← Усі ігри</a>
-    <h1 id="gameTitle">Гра</h1>
-    <div id="gameRoot" aria-live="polite"></div>
+  <!-- Шаблон гри: game.html?g=<id>. Додати нову гру = додати файл js/games/<id>.js і запис у js/game-page.js -->
+  <main id="gamePage">
+    <div class="container game-head">
+      <a href="index.html#games" class="back">← Усі ігри</a>
+      <p class="label" id="gameLabel"></p>
+      <h1 id="gameTitle">Гра</h1>
+    </div>
+    <section class="game-band">
+      <div class="container game-layout">
+        <aside class="game-aside">
+          <p class="label">Твій виклик</p>
+          <h2 id="asideTitle"></h2>
+          <p id="asideText"></p>
+          <p class="label label--foot" id="asideFoot"></p>
+        </aside>
+        <div id="gameRoot" aria-live="polite"></div>
+      </div>
+    </section>
   </main>
+
+  <footer class="container footer">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="index.html" class="logo">ЛяСторія</a>
+        <span>Минуле ближче, ніж здається.</span>
+      </div>
+      <span class="label" style="margin:0">Історія України / Грай і відкривай</span>
+    </div>
+  </footer>
+
   <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script src="js/game-page.js"></script>
