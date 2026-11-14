@@ -32,7 +32,9 @@
       panel.appendChild(el('p', 'hint', 'Завантажуємо події…'));
 
       fetch(DATA_URL, { credentials: 'same-origin' })
-        .then(function (r) { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+        .then(function (r) {
+          if (!r.ok) throw new Error('http ' + r.status); return r.json();
+        })
         .then(function (d) {
           if (!d || !d.meta || !Array.isArray(d.events) || d.events.length < ROUNDS) throw new Error('bad data');
           start(d.meta, d.events);
