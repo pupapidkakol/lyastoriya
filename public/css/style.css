@@ -230,6 +230,14 @@ img.is-missing { display: none }
 .quiz-answers .btn, .fact-answers .btn { justify-content: flex-start; height: 52px; font-size: 14px; font-weight: 600; padding: 0 18px; border-radius: var(--radius-sm) }
 .quiz-answers .btn:disabled, .fact-answers .btn:disabled { opacity: 1 }
 
+.quiz-question-image { margin: -4px 0 24px }
+.quiz-question-image img { display: block; width: 100%; max-height: 340px; object-fit: contain; border-radius: var(--radius-sm); background: var(--color-tint) }
+.quiz-question-image figcaption { display: grid; gap: 4px; margin-top: 6px; color: var(--color-muted); font-size: 11px; line-height: 1.5 }
+.quiz-image-credit { font-family: var(--mono); font-size: 10px }
+.quiz-sources { margin: 12px 0 16px; font-size: 12px }
+.quiz-sources summary { width: fit-content; color: var(--color-purple); cursor: pointer; font-weight: 600 }
+.quiz-sources ul { display: grid; gap: 6px; margin: 8px 0 0; padding-left: 18px; color: var(--color-muted) }
+
 .matching-answers { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, minmax(64px, auto)); grid-auto-flow: column; gap: 12px }
 .matching-answers .btn { justify-content: center; height: 48px; font-size: 15px }
 .answers .matching-question, .answers .matching-answer { position: relative; min-height: 64px; display: flex; align-items: center; padding: 16px 18px; border-radius: var(--radius-sm); line-height: 1.45; overflow: hidden }
