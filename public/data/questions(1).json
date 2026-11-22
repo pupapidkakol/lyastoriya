@@ -39,7 +39,7 @@
       "image": {
         "file": "rus-001.jpg",
         "title": "Радзивіллівський літопис Убивство Аскольда і Діра.jpg",
-        "author": "Радзивіллівський літопис (XV ст.)",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
         "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:%D0%A0%D0%B0%D0%B4%D0%B7%D0%B8%D0%B2%D1%96%D0%BB%D0%BB%D1%96%D0%B2%D1%81%D1%8C%D0%BA%D0%B8%D0%B9_%D0%BB%D1%96%D1%82%D0%BE%D0%BF%D0%B8%D1%81_%D0%A3%D0%B1%D0%B8%D0%B2%D1%81%D1%82%D0%B2%D0%BE_%D0%90%D1%81%D0%BA%D0%BE%D0%BB%D1%8C%D0%B4%D0%B0_%D1%96_%D0%94%D1%96%D1%80%D0%B0.jpg"
       }
@@ -79,8 +79,8 @@
       "image": {
         "file": "rus-002.jpg",
         "title": "Убийство Игоря I по приказу Мала.jpg",
-        "author": "Радзивіллівський літопис (XV ст.)",
-        "license": "Public domain",
+        "author": "Радзивіллівський літопис, XV ст.",
+        "license": "CC BY-SA 4.0",
         "url": "https://commons.wikimedia.org/wiki/File:%D0%A3%D0%B1%D0%B8%D0%B9%D1%81%D1%82%D0%B2%D0%BE_%D0%98%D0%B3%D0%BE%D1%80%D1%8F_I_%D0%BF%D0%BE_%D0%BF%D1%80%D0%B8%D0%BA%D0%B0%D0%B7%D1%83_%D0%9C%D0%B0%D0%BB%D0%B0.jpg"
       }
     },
@@ -120,7 +120,7 @@
       "image": {
         "file": "rus-003.jpg",
         "title": "Radzivill Olga-Avenge-to-Drevlians.jpg",
-        "author": "Радзивіллівський літопис (XV ст.)",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
         "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Radzivill_Olga-Avenge-to-Drevlians.jpg"
       }
@@ -160,8 +160,8 @@
       "image": {
         "file": "rus-004.png",
         "title": "Khazar map1.PNG",
-        "author": "",
-        "license": "",
+        "author": "Briangotts",
+        "license": "CC BY-SA 3.0",
         "url": "https://commons.wikimedia.org/wiki/File:Khazar_map1.PNG"
       }
     },
@@ -241,8 +241,8 @@
       "image": {
         "file": "rus-006.png",
         "title": "Varangian routes.png",
-        "author": "",
-        "license": "",
+        "author": "Briangotts",
+        "license": "CC BY-SA 3.0",
         "url": "https://commons.wikimedia.org/wiki/File:Varangian_routes.png"
       }
     },
@@ -322,10 +322,10 @@
       ],
       "image": {
         "file": "rus-008.jpg",
-        "title": "",
-        "author": "Радзивіллівський літопис (XV ст.)",
-        "license": "Public domain",
-        "url": ""
+        "title": "Василий II и Константин VIII убеждают Анну выйти за Владимира.jpg",
+        "author": "Радзивіллівський літопис, XV ст.",
+        "license": "CC BY-SA 4.0",
+        "url": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%B0%D1%81%D0%B8%D0%BB%D0%B8%D0%B9_II_%D0%B8_%D0%9A%D0%BE%D0%BD%D1%81%D1%82%D0%B0%D0%BD%D1%82%D0%B8%D0%BD_VIII_%D1%83%D0%B1%D0%B5%D0%B6%D0%B4%D0%B0%D1%8E%D1%82_%D0%90%D0%BD%D0%BD%D1%83_%D0%B2%D1%8B%D0%B9%D1%82%D0%B8_%D0%B7%D0%B0_%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80%D0%B0.jpg"
       }
     },
     {
@@ -363,8 +363,8 @@
       "image": {
         "file": "rus-009.jpg",
         "title": "Десятинная церковь - макет.jpg",
-        "author": "",
-        "license": "",
+        "author": "Voevoda",
+        "license": "CC BY-SA 4.0",
         "url": "https://commons.wikimedia.org/wiki/File:%D0%94%D0%B5%D1%81%D1%8F%D1%82%D0%B8%D0%BD%D0%BD%D0%B0%D1%8F_%D1%86%D0%B5%D1%80%D0%BA%D0%BE%D0%B2%D1%8C_-_%D0%BC%D0%B0%D0%BA%D0%B5%D1%82.jpg"
       }
     },
@@ -403,8 +403,8 @@
       "image": {
         "file": "rus-010.jpg",
         "title": "Illarion ikona.jpg",
-        "author": "",
-        "license": "",
+        "author": "Невідомий автор",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Illarion_ikona.jpg"
       }
     },
@@ -443,10 +443,10 @@
       ],
       "image": {
         "file": "rus-011.jpg",
-        "title": "",
-        "author": "",
-        "license": "",
-        "url": ""
+        "title": "Russkaya Pravda Akadem codex 1.jpg",
+        "author": "Б. Д. Греков (вид. «Правда Русская», т. III, 1963)",
+        "license": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/File:Russkaya_Pravda_Akadem_codex_1.jpg"
       }
     },
     {
@@ -484,7 +484,7 @@
       "image": {
         "file": "rus-012.jpg",
         "title": "Radz-kyiv-yaroslav.jpg",
-        "author": "Радзивіллівський літопис (XV ст.)",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
         "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Radz-kyiv-yaroslav.jpg"
       }
@@ -524,10 +524,10 @@
       ],
       "image": {
         "file": "rus-013.jpg",
-        "title": "",
-        "author": "Радзивіллівський літопис (XV ст.)",
+        "title": "Congress in Uvetichi in 1100.jpg",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
         "license": "Public domain",
-        "url": ""
+        "url": "https://commons.wikimedia.org/wiki/File:Congress_in_Uvetichi_in_1100.jpg"
       }
     },
     {
@@ -565,8 +565,8 @@
       "image": {
         "file": "rus-014.jpg",
         "title": "B12 Blinding of Vasil.jpg",
-        "author": "",
-        "license": "",
+        "author": "Федір Бруні",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:B12_Blinding_of_Vasil.jpg"
       }
     },
@@ -606,8 +606,8 @@
       "image": {
         "file": "rus-015.png",
         "title": "Владимир Мономах на Киевском престоле.png",
-        "author": "",
-        "license": "",
+        "author": "Невідомі мініатюристи (Лицевий літописний звід, 1560–1570-ті рр.)",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80_%D0%9C%D0%BE%D0%BD%D0%BE%D0%BC%D0%B0%D1%85_%D0%BD%D0%B0_%D0%9A%D0%B8%D0%B5%D0%B2%D1%81%D0%BA%D0%BE%D0%BC_%D0%BF%D1%80%D0%B5%D1%81%D1%82%D0%BE%D0%BB%D0%B5.png"
       }
     },
@@ -646,8 +646,8 @@
       "image": {
         "file": "rus-016.jpg",
         "title": "Instruction of Vladimir II Monomakh.jpeg",
-        "author": "",
-        "license": "",
+        "author": "Борис Чориков",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Instruction_of_Vladimir_II_Monomakh.jpeg"
       }
     },
@@ -687,8 +687,8 @@
       "image": {
         "file": "rus-017.jpg",
         "title": "Battle on Nemiga 02.jpg",
-        "author": "",
-        "license": "",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Battle_on_Nemiga_02.jpg"
       }
     },
@@ -727,10 +727,10 @@
       ],
       "image": {
         "file": "rus-018.jpg",
-        "title": "",
-        "author": "",
-        "license": "",
-        "url": ""
+        "title": "Mstislav I of Kiev (Tsarskiy titulyarnik).jpg",
+        "author": "Невідомі автори (Царський титулярник, 1672)",
+        "license": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/File:Mstislav_I_of_Kiev_(Tsarskiy_titulyarnik).jpg"
       }
     },
     {
@@ -769,8 +769,8 @@
       "image": {
         "file": "rus-019.jpg",
         "title": "Siege of Kiev1169.jpg",
-        "author": "",
-        "license": "",
+        "author": "Невідомий автор (Радзивіллівський літопис, XV ст.)",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Siege_of_Kiev1169.jpg"
       }
     },
@@ -810,8 +810,8 @@
       "image": {
         "file": "rus-020.jpg",
         "title": "Roman Mstislavich , Roman of Halych, Roman the Great.jpg",
-        "author": "",
-        "license": "",
+        "author": "Невідомий автор",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Roman_Mstislavich_%2C_Roman_of_Halych%2C_Roman_the_Great.jpg"
       }
     },
@@ -850,10 +850,10 @@
       ],
       "image": {
         "file": "rus-021.png",
-        "title": "",
-        "author": "",
-        "license": "",
-        "url": ""
+        "title": "Битва на Калке.png",
+        "author": "Невідомі мініатюристи (Лицевий літописний звід, 1560–1570-ті рр.)",
+        "license": "Public domain",
+        "url": "https://commons.wikimedia.org/wiki/File:%D0%91%D0%B8%D1%82%D0%B2%D0%B0_%D0%BD%D0%B0_%D0%9A%D0%B0%D0%BB%D0%BA%D0%B5.png"
       }
     },
     {
@@ -892,8 +892,8 @@
       "image": {
         "file": "rus-022.png",
         "title": "Siege of Kiev (1240).png",
-        "author": "",
-        "license": "",
+        "author": "Невідомі мініатюристи (Лицевий літописний звід, 1560–1570-ті рр.)",
+        "license": "Public domain",
         "url": "https://commons.wikimedia.org/wiki/File:Siege_of_Kiev_%281240%29.png"
       }
     },
@@ -931,10 +931,10 @@
       ],
       "image": {
         "file": "rus-023.jpg",
-        "title": "",
-        "author": "",
-        "license": "",
-        "url": ""
+        "title": "Jarlig Temur Qutlugh copy 1 GIM.jpg",
+        "author": "Лапоть",
+        "license": "CC0",
+        "url": "https://commons.wikimedia.org/wiki/File:Jarlig_Temur_Qutlugh_copy_1_GIM.jpg"
       }
     },
     {
@@ -973,8 +973,8 @@
       "image": {
         "file": "rus-024.jpg",
         "title": "Папский нунций подносит князю Даниилу I королевскую корону.jpg",
-        "author": "",
-        "license": "",
+        "author": "Юліан Шюблер (гравюра) за малюнком Клавдія Лебедєва",
+        "license": "CC BY-SA 4.0",
         "url": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D0%BF%D1%81%D0%BA%D0%B8%D0%B9_%D0%BD%D1%83%D0%BD%D1%86%D0%B8%D0%B9_%D0%BF%D0%BE%D0%B4%D0%BD%D0%BE%D1%81%D0%B8%D1%82_%D0%BA%D0%BD%D1%8F%D0%B7%D1%8E_%D0%94%D0%B0%D0%BD%D0%B8%D0%B8%D0%BB%D1%83_I_%D0%BA%D0%BE%D1%80%D0%BE%D0%BB%D0%B5%D0%B2%D1%81%D0%BA%D1%83%D1%8E_%D0%BA%D0%BE%D1%80%D0%BE%D0%BD%D1%83.jpg"
       }
     }
