@@ -40,6 +40,7 @@ app.use(helmet({
     directives: {
       'script-src': ["'self'"],
       'style-src': ["'self'", 'https://fonts.googleapis.com'],
+      'style-src-attr': ["'unsafe-inline'"],
       'font-src': ['https://fonts.gstatic.com'],
       'img-src': ["'self'", 'data:'],
       'upgrade-insecure-requests': PROD ? [] : null
