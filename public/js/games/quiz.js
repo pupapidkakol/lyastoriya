@@ -1,6 +1,7 @@
-import { shuffle, isCorrect, calculateScore } from './quiz-logic.js';
+import { shuffle, isCorrect, calculateScore, calcResult, isValidQuestionBank } from './quiz-logic.js';
 
 const ROUND = 10;
+const INVALID_BANK_MESSAGE = 'Некоректний банк запитань: перевірте текст, варіанти та правильну відповідь кожного питання.';
 
 function el(tag, cls, text) {
     var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e;
@@ -87,8 +88,8 @@ export function mount(root) {
             return response.json();
         })
         .then((data) => {
-            if (!data || !Array.isArray(data.questions) || data.questions.length < ROUND) {
-                throw new Error('Некоректний формат банку запитань.');
+            if (!data || !Array.isArray(data.questions) || data.questions.length < ROUND || !isValidQuestionBank(data.questions)) {
+                throw new Error(INVALID_BANK_MESSAGE);
             }
             const questions = data.questions;
             start(data.topic || 'історії України', questions);
@@ -96,7 +97,9 @@ export function mount(root) {
         .catch((error) => {
             console.error('Не вдалося завантажити запитання квізу:', error);
             panel.textContent = '';
-            panel.appendChild(el('p', 'q-text', 'Не вдалося завантажити запитання. Оновіть сторінку й спробуйте ще раз.'));
+            panel.appendChild(el('p', 'q-text', error.message === INVALID_BANK_MESSAGE
+                ? INVALID_BANK_MESSAGE
+                : 'Не вдалося завантажити запитання. Оновіть сторінку й спробуйте ще раз.'));
         });
 
     function start(topic, questions) {
@@ -160,10 +163,11 @@ export function mount(root) {
 
             function finish() {
                 const score = calculateScore(results);
+                const result = calcResult(score, ROUND);
                 panel.textContent = '';
                 const status = el('p', 'hint', 'Зберігаємо результат…');
                 panel.append(
-                    el('p', 'big', score + ' / ' + ROUND),
+                    el('p', 'big', result.score + ' з ' + result.total + ', ' + result.percent + '%'),
                     el('p', 'q-text', score >= 8 ? 'Відмінно!' : 'Спробуй ще раз.'),
                     status,
                     btn('Грати ще', 'btn--accent', play)
