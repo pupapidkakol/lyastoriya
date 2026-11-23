@@ -128,7 +128,11 @@ class FakeNode {
     return name in this._attrs ? this._attrs[name] : null;
   }
 
-  addEventListener(type, fn) { (this._listeners[type] = this._listeners[type] || []).push(fn); }
+  addEventListener(type, fn) {
+    // Як у браузері: слухач, що не є функцією (напр. undefined), просто ігнорується
+    if (typeof fn !== 'function') return;
+    (this._listeners[type] = this._listeners[type] || []).push(fn);
+  }
   dispatchEvent(evt) {
     const type = typeof evt === 'string' ? evt : evt.type;
     (this._listeners[type] || []).slice().forEach((fn) => fn.call(this, { type, target: this, preventDefault() {} }));
