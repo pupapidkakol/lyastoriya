@@ -1,23 +1,27 @@
-'use strict';
 // Сторінка гри (game-page.js): білий список ігор, заповнення сторінки, захист від підстановки id.
-const { test } = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('fs');
-const path = require('path');
-const { PUBLIC, createEnv, flush, extractLiteral } = require('./helpers/browser-env');
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { PUBLIC, installBrowser, waitFor, extractLiteral } from './helpers/browser-env.js';
 
 const REGISTRY = extractLiteral('public/js/game-page.js', 'REGISTRY');
 const SERVER_GAMES = extractLiteral('server/server.js', 'GAMES');
 const IDS = ['gamePage', 'gameRoot', 'gameTitle', 'gameLabel', 'asideTitle', 'asideText', 'asideFoot'];
+const PAGE_URL = pathToFileURL(path.join(PUBLIC, 'js', 'game-page.js')).href;
+let run = 0;
 
-function openPage(search) {
-  const env = createEnv({ search });
+// game-page.js — модуль, що виконується одразу при імпорті. Щоб запустити його знову,
+// імпортуємо з іншим ?run=N (так Node вважає його новим модулем).
+async function openPage(search) {
+  const env = installBrowser({ search });
   for (const id of IDS) {
     const e = env.document.createElement('div');
     e.id = id;
     env.document.body.appendChild(e);
   }
-  env.run('js/game-page.js');
+  await import(PAGE_URL + '?run=' + (++run));
   const $ = (id) => env.document.getElementById(id);
   return Object.assign(env, { $ });
 }
@@ -52,8 +56,8 @@ test('кольори ігор існують у public/tokens.css', () => {
 });
 
 for (const id of Object.keys(REGISTRY)) {
-  test(`?g=${id} — сторінка заповнюється, гра підвантажується і запускається`, async () => {
-    const env = openPage('?g=' + id);
+  test(`?g=${id} — сторінка заповнюється, модуль гри завантажується і гра запускається`, async () => {
+    const env = await openPage('?g=' + id);
     const g = REGISTRY[id];
     assert.equal(env.document.title, g.title + ' — ЛяСторія');
     assert.equal(env.$('gameTitle').textContent, g.title);
@@ -62,17 +66,18 @@ for (const id of Object.keys(REGISTRY)) {
     assert.equal(env.$('asideText').textContent, g.text);
     assert.equal(env.$('asideFoot').textContent, g.n + ' / ' + g.foot);
     assert.equal(env.$('gamePage').style['--game'], g.color);
-    const scripts = env.document.querySelectorAll('script');
-    assert.deepEqual(scripts.map((s) => s.src), ['js/games/' + id + '.js']);
-    await flush();
-    assert.ok(env.$('gameRoot').querySelector('.panel'), 'гра змонтувалась у #gameRoot');
+    const root = env.$('gameRoot');
+    await waitFor(() => root.querySelector('.panel') || root.textContent);
+    assert.notEqual(root.textContent, 'Не вдалося завантажити гру.', 'модуль гри не завантажився: ' + env.consoleErrors.join('; '));
+    assert.ok(root.querySelector('.panel'), 'гра змонтувалась у #gameRoot');
   });
 }
 
 for (const search of ['', '?g=', '?g=unknown', '?g=../../server/server', '?g=quiz.js', '?g=QUIZ', '?g=constructor', '?g=__proto__', '?g=toString']) {
-  test(`«${search || '(без параметра)'}» → «Таку гру не знайдено.», жоден скрипт не підключається`, () => {
-    const env = openPage(search);
+  test(`«${search || '(без параметра)'}» → «Таку гру не знайдено.», заголовок не змінюється`, async () => {
+    const env = await openPage(search);
     assert.equal(env.$('gameRoot').textContent, 'Таку гру не знайдено.');
-    assert.equal(env.document.querySelectorAll('script').length, 0);
+    assert.equal(env.document.title, '');
+    assert.equal(env.$('gameTitle').textContent, '');
   });
 }

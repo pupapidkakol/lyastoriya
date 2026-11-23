@@ -1,8 +1,7 @@
-'use strict';
 // Логіка ігор: проходимо гру «як користувач» і перевіряємо рахунок, тексти та збереження результату.
-const { describe, test } = require('node:test');
-const assert = require('node:assert/strict');
-const { mountGame, flush, findByText, extractLiteral, readJson } = require('./helpers/browser-env');
+import { describe, test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mountGame, flush, findByText, extractLiteral, readJson } from './helpers/browser-env.js';
 
 const fail = (status) => () => Promise.reject(Object.assign(new Error('fail'), { status }));
 
@@ -21,10 +20,11 @@ async function checkSaveErrors(play) {
 // ===========================================================================
 describe('Квіз (quiz.js)', () => {
   const QUIZ = readJson('data/questions(1).json');
+  const serve = (data) => ({ fetch: () => ({ ok: true, status: 200, json: () => Promise.resolve(data) }) });
 
   // answerCorrect(n) → чи відповідати правильно на n-те запитання (1..10)
   async function playQuiz(answerCorrect, options) {
-    const g = mountGame('quiz', options);
+    const g = await mountGame('quiz', options);
     await flush();
     findByText(g.panel(), 'button', 'Почати').click();
     const seen = [];
@@ -38,41 +38,52 @@ describe('Квіз (quiz.js)', () => {
       const ok = answerCorrect(n);
       const option = q.options.find((o) => (ok ? o.id === q.correct : o.id !== q.correct));
       findByText(panel, '.quiz-answers button', option.text).click();
-      panel.querySelector('.verdict button').click();
+      findByText(panel, '.verdict button', n < 10 ? 'Далі' : 'Результат').click();
     }
     return Object.assign(g, { seen });
   }
 
+  test('модуль завантажується і має функцію mount', async () => {
+    const mod = await import('../public/js/games/quiz.js');
+    assert.equal(typeof mod.mount, 'function');
+  });
+
   test('спочатку «Завантажуємо…», після завантаження — тема і кількість запитань', async () => {
-    const g = mountGame('quiz');
+    const g = await mountGame('quiz');
     assert.match(g.panel().textContent, /Завантажуємо запитання/);
     await flush();
-    assert.deepEqual(g.fetchCalls, ['data/questions(1).json']);
+    assert.equal(g.fetchCalls.length, 1);
+    assert.match(decodeURI(g.fetchCalls[0]), /\/data\/questions\(1\)\.json$/);
     const text = g.panel().textContent;
-    assert.ok(text.includes('Тема: ' + QUIZ.topic), 'показано тему');
+    assert.ok(text.includes('10 запитань з теми «' + QUIZ.topic + '»'), 'показано тему');
     assert.ok(text.includes('У базі ' + QUIZ.questions.length + ' запитань'), 'показано кількість');
   });
 
-  test('усі відповіді правильні → 10 / 10, «Відмінно!», результат збережено', async () => {
+  test('усі відповіді правильні → «10 з 10, 100%», «Відмінно!», результат збережено', async () => {
     const g = await playQuiz(() => true);
-    assert.equal(g.panel().querySelector('.big').textContent, '10 / 10');
+    assert.equal(g.panel().querySelector('.big').textContent, '10 з 10, 100%');
     assert.match(g.panel().textContent, /Відмінно!/);
     assert.deepEqual(g.saved, [{ game: 'quiz', score: 10, total: 10 }]);
     await flush();
     assert.match(g.panel().textContent, /Результат збережено у твоєму профілі/);
   });
 
-  test('6 правильних → 6 / 10, «Непогано!»', async () => {
-    const g = await playQuiz((n) => n <= 6);
-    assert.equal(g.panel().querySelector('.big').textContent, '6 / 10');
-    assert.match(g.panel().textContent, /Непогано!/);
-    assert.deepEqual(g.saved, [{ game: 'quiz', score: 6, total: 10 }]);
+  test('8 правильних → «8 з 10, 80%», ще «Відмінно!» (межа)', async () => {
+    const g = await playQuiz((n) => n <= 8);
+    assert.equal(g.panel().querySelector('.big').textContent, '8 з 10, 80%');
+    assert.match(g.panel().textContent, /Відмінно!/);
+    assert.deepEqual(g.saved, [{ game: 'quiz', score: 8, total: 10 }]);
   });
 
-  test('усі відповіді неправильні → 0 / 10, «Спробуй ще раз.»', async () => {
-    const g = await playQuiz(() => false);
-    assert.equal(g.panel().querySelector('.big').textContent, '0 / 10');
+  test('7 правильних → «7 з 10, 70%», «Спробуй ще раз.»', async () => {
+    const g = await playQuiz((n) => n <= 7);
+    assert.equal(g.panel().querySelector('.big').textContent, '7 з 10, 70%');
     assert.match(g.panel().textContent, /Спробуй ще раз\./);
+  });
+
+  test('усі відповіді неправильні → «0 з 10, 0%»', async () => {
+    const g = await playQuiz(() => false);
+    assert.equal(g.panel().querySelector('.big').textContent, '0 з 10, 0%');
     assert.deepEqual(g.saved, [{ game: 'quiz', score: 0, total: 10 }]);
   });
 
@@ -81,40 +92,54 @@ describe('Квіз (quiz.js)', () => {
     assert.equal(new Set(g.seen.map((q) => q.id)).size, 10);
   });
 
-  test('після відповіді всі кнопки вимикаються, показується вердикт і пояснення', async () => {
-    const g = mountGame('quiz');
+  test('показуються всі варіанти відповіді запитання', async () => {
+    const g = await mountGame('quiz');
     await flush();
     findByText(g.panel(), 'button', 'Почати').click();
     const panel = g.panel();
     const q = QUIZ.questions.find((x) => x.text === panel.querySelector('.q-text').textContent);
-    const wrong = q.options.find((o) => o.id !== q.correct);
-    findByText(panel, '.quiz-answers button', wrong.text).click();
+    const shown = panel.querySelectorAll('.quiz-answers button').map((b) => b.textContent).sort();
+    assert.deepEqual(shown, q.options.map((o) => o.text).sort());
+  });
+
+  test('після відповіді кнопки вимикаються, показуються вердикт, правильна відповідь і пояснення', async () => {
+    const g = await mountGame('quiz');
+    await flush();
+    findByText(g.panel(), 'button', 'Почати').click();
+    const panel = g.panel();
+    const q = QUIZ.questions.find((x) => x.text === panel.querySelector('.q-text').textContent);
+    const correct = q.options.find((o) => o.id === q.correct);
+    findByText(panel, '.quiz-answers button', q.options.find((o) => o.id !== q.correct).text).click();
 
     assert.ok(panel.querySelectorAll('.quiz-answers button').every((b) => b.disabled), 'кнопки вимкнені');
     assert.equal(panel.querySelector('.verdict b').textContent, 'Не зовсім.');
-    const correctText = q.options.find((o) => o.id === q.correct).text;
-    assert.equal(panel.querySelector('.verdict .hint').textContent, q.explanation || ('Правильна відповідь: ' + correctText));
+    const hints = panel.querySelectorAll('.verdict .hint').map((h) => h.textContent);
+    assert.equal(hints[0], 'Правильна відповідь: ' + correct.text);
+    assert.equal(hints[1], q.explanation || correct.why || '');
   });
 
-  test('картинка й джерела: правильний шлях, посилання лише http(s) з rel="noopener noreferrer"', async () => {
-    const g = mountGame('quiz');
+  test('картинки й джерела: правильний файл, посилання лише http(s) з rel="noopener noreferrer"', async () => {
+    const g = await mountGame('quiz');
     await flush();
     findByText(g.panel(), 'button', 'Почати').click();
     for (let n = 1; n <= 10; n++) {
       const panel = g.panel();
       const q = QUIZ.questions.find((x) => x.text === panel.querySelector('.q-text').textContent);
-      const img = panel.querySelector('.quiz-image img');
-      if (q.image && q.image.file) assert.equal(img && img.src, 'images/' + encodeURIComponent(q.image.file));
+      const img = panel.querySelector('.quiz-question-image img');
+      if (q.image && q.image.file) {
+        assert.ok(img, `запитання ${q.id}: є картинка`);
+        assert.ok(img.src.endsWith('/images/' + encodeURIComponent(q.image.file)), `запитання ${q.id}: шлях ${img.src}`);
+      }
       findByText(panel, '.quiz-answers button', q.options[0].text).click();
 
-      const links = panel.querySelectorAll('.verdict a');
-      const httpSources = (q.sources || []).filter((s) => /^https?:/i.test(s.url || ''));
+      const links = panel.querySelectorAll('.quiz-sources a');
+      const httpSources = (q.sources || []).filter((s) => s && s.title && /^https?:\/\//i.test(s.url || ''));
       assert.equal(links.length, httpSources.length, `запитання ${q.id}: кількість посилань на джерела`);
       for (const a of links) {
         assert.equal(a.rel, 'noopener noreferrer');
         assert.equal(a.target, '_blank');
       }
-      panel.querySelector('.verdict button').click();
+      findByText(panel, '.verdict button', n < 10 ? 'Далі' : 'Результат').click();
     }
   });
 
@@ -124,23 +149,25 @@ describe('Квіз (quiz.js)', () => {
     assert.ok(g.panel().textContent.includes('1 / 10'));
   });
 
-  test('помилка завантаження (HTTP 500) → повідомлення для користувача', async () => {
-    const g = mountGame('quiz', { fetch: () => ({ ok: false, status: 500, json: () => Promise.resolve({}) }) });
+  test('помилка завантаження (HTTP 500) → «Не вдалося завантажити запитання»', async () => {
+    const g = await mountGame('quiz', { fetch: () => ({ ok: false, status: 500, json: () => Promise.resolve({}) }) });
     await flush();
     assert.match(g.panel().textContent, /Не вдалося завантажити запитання/);
   });
 
-  test('зіпсовані дані (менше 10 запитань / немає правильної відповіді) → повідомлення', async () => {
-    const few = { topic: 'Т', questions: QUIZ.questions.slice(0, 9) };
-    const g1 = mountGame('quiz', { fetch: () => ({ ok: true, status: 200, json: () => Promise.resolve(few) }) });
-    await flush();
-    assert.match(g1.panel().textContent, /Не вдалося завантажити запитання/);
-
+  test('зіпсований банк запитань → повідомлення «Некоректний банк запитань»', async () => {
     const broken = JSON.parse(JSON.stringify(QUIZ));
     broken.questions[0].correct = 'немає-такого';
-    const g2 = mountGame('quiz', { fetch: () => ({ ok: true, status: 200, json: () => Promise.resolve(broken) }) });
+    const g = await mountGame('quiz', serve(broken));
     await flush();
-    assert.match(g2.panel().textContent, /Не вдалося завантажити запитання/);
+    assert.match(g.panel().textContent, /Некоректний банк запитань/);
+  });
+
+  test('менше 10 запитань → гра не стартує', async () => {
+    const g = await mountGame('quiz', serve({ topic: 'Т', questions: QUIZ.questions.slice(0, 9) }));
+    await flush();
+    assert.ok(!g.panel().querySelectorAll('button').some((b) => b.textContent === 'Почати'));
+    assert.match(g.panel().textContent, /Некоректний банк запитань/);
   });
 
   test('не вдалося зберегти результат: 401 → посилання «Увійти», інша помилка → «сервер недоступний»', async () => {
@@ -150,28 +177,44 @@ describe('Квіз (quiz.js)', () => {
 
 // ===========================================================================
 describe('Фейк чи факт (fake-or-fact.js)', () => {
-  const DATA = readJson('data/fake-or-fact.json');
+  const Q = extractLiteral('public/js/games/fake-or-fact.js', 'Q');
   const ERA = extractLiteral('public/js/games/fake-or-fact.js', 'ERA');
 
+  test('дані: кожне твердження — [відома епоха, текст, 0|1, пояснення], тексти не повторюються', () => {
+    assert.ok(Q.length >= 10, 'тверджень вистачає на раунд');
+    Q.forEach((q, i) => {
+      assert.ok(Array.isArray(q) && q.length === 4, `рядок ${i}: 4 елементи`);
+      assert.ok(Object.prototype.hasOwnProperty.call(ERA, q[0]), `рядок ${i}: невідома епоха «${q[0]}»`);
+      assert.ok(typeof q[1] === 'string' && q[1].trim(), `рядок ${i}: порожній текст`);
+      assert.ok(q[2] === 0 || q[2] === 1, `рядок ${i}: 0 або 1`);
+      assert.ok(typeof q[3] === 'string' && q[3].trim(), `рядок ${i}: порожнє пояснення`);
+    });
+    const texts = Q.map((q) => q[1].trim());
+    assert.deepEqual(texts.filter((t, i) => texts.indexOf(t) !== i), []);
+    assert.ok(Q.some((q) => q[2] === 1) && Q.some((q) => q[2] === 0), 'є і факти, і фейки');
+  });
+
   async function playFof(answerCorrect, options) {
-    const g = mountGame('fake-or-fact', options);
-    await flush();
+    const g = await mountGame('fake-or-fact', options);
     findByText(g.panel(), 'button', 'Почати').click();
     for (let n = 1; n <= 10; n++) {
       const panel = g.panel();
-      const q = DATA.find((x) => x[1] === panel.querySelector('.q-text').textContent);
-      assert.ok(q, 'твердження є в JSON');
+      const q = Q.find((x) => x[1] === panel.querySelector('.q-text').textContent);
+      assert.ok(q, 'твердження є в даних гри');
       assert.ok(panel.querySelector('.q-meta').textContent.startsWith(ERA[q[0]]), 'показано епоху');
       const isFact = q[2] === 1;
-      const choice = answerCorrect(n) === isFact ? 'Факт' : 'Фейк';
-      findByText(panel, '.fact-answers button', choice).click();
-      const verdict = panel.querySelector('.verdict b').textContent;
-      assert.equal(verdict, (answerCorrect(n) ? 'Правильно. ' : 'Не зовсім. ') + (isFact ? 'Це факт.' : 'Це фейк.'));
+      findByText(panel, '.fact-answers button', answerCorrect(n) === isFact ? 'Факт' : 'Фейк').click();
+      assert.equal(panel.querySelector('.verdict b').textContent, (answerCorrect(n) ? 'Правильно. ' : 'Не зовсім. ') + (isFact ? 'Це факт.' : 'Це фейк.'));
       assert.equal(panel.querySelector('.verdict .hint').textContent, q[3], 'показано пояснення');
-      panel.querySelector('.verdict button').click();
+      findByText(panel, '.verdict button', n < 10 ? 'Далі' : 'Результат').click();
     }
     return g;
   }
+
+  test('на старті показано кількість тверджень у базі', async () => {
+    const g = await mountGame('fake-or-fact');
+    assert.ok(g.panel().textContent.includes('У базі ' + Q.length + ' тверджень'));
+  });
 
   test('усі правильно → 10 / 10, результат збережено', async () => {
     const g = await playFof(() => true);
@@ -193,19 +236,10 @@ describe('Фейк чи факт (fake-or-fact.js)', () => {
   });
 
   test('після відповіді обидві кнопки вимкнені', async () => {
-    const g = mountGame('fake-or-fact');
-    await flush();
+    const g = await mountGame('fake-or-fact');
     findByText(g.panel(), 'button', 'Почати').click();
     findByText(g.panel(), '.fact-answers button', 'Факт').click();
     assert.ok(g.panel().querySelectorAll('.fact-answers button').every((b) => b.disabled));
-  });
-
-  test('зіпсовані дані (невідома епоха) → повідомлення', async () => {
-    const bad = DATA.map((q) => q.slice());
-    bad[0][0] = 'mars';
-    const g = mountGame('fake-or-fact', { fetch: () => ({ ok: true, status: 200, json: () => Promise.resolve(bad) }) });
-    await flush();
-    assert.match(g.panel().textContent, /Не вдалося завантажити твердження/);
   });
 
   test('не вдалося зберегти результат: 401 / інша помилка', async () => {
@@ -234,8 +268,8 @@ describe('Хронологічний виклик (chronology.js)', () => {
   });
 
   // mistakesPerRound — скільки разів у кожному раунді натиснути не ту подію
-  function playChronology(mistakesPerRound, options) {
-    const g = mountGame('chronology', options);
+  async function playChronology(mistakesPerRound, options) {
+    const g = await mountGame('chronology', options);
     findByText(g.panel(), 'button', 'Почати').click();
     for (let round = 1; round <= 3; round++) {
       const panel = g.panel();
@@ -256,28 +290,28 @@ describe('Хронологічний виклик (chronology.js)', () => {
     return g;
   }
 
-  test('без помилок → 15 / 15, «Бездоганно», результат збережено', () => {
-    const g = playChronology(0);
+  test('без помилок → 15 / 15, «Бездоганно», результат збережено', async () => {
+    const g = await playChronology(0);
     assert.equal(g.panel().querySelector('.big').textContent, '15 / 15');
     assert.match(g.panel().textContent, /Бездоганно: жодної помилки\./);
     assert.deepEqual(g.saved, [{ game: 'chronology', score: 15, total: 15 }]);
   });
 
-  test('по одній помилці в раунді → 12 / 15, «Добре знаєш хронологію»', () => {
-    const g = playChronology(1);
+  test('по одній помилці в раунді → 12 / 15, «Добре знаєш хронологію»', async () => {
+    const g = await playChronology(1);
     assert.equal(g.panel().querySelector('.big').textContent, '12 / 15');
     assert.match(g.panel().textContent, /Добре знаєш хронологію\./);
     assert.deepEqual(g.saved, [{ game: 'chronology', score: 12, total: 15 }]);
   });
 
-  test('багато помилок → рахунок не падає нижче 0', () => {
-    const g = playChronology(6);
+  test('багато помилок → рахунок не падає нижче 0', async () => {
+    const g = await playChronology(6);
     assert.equal(g.panel().querySelector('.big').textContent, '0 / 15');
     assert.match(g.panel().textContent, /Варто повторити дати/);
   });
 
-  test('неправильний клік: лічильник помилок зростає, подія не позначається як вгадана', () => {
-    const g = mountGame('chronology');
+  test('неправильний клік: лічильник помилок зростає, подія не позначається як вгадана', async () => {
+    const g = await mountGame('chronology');
     findByText(g.panel(), 'button', 'Почати').click();
     const buttons = g.panel().querySelectorAll('.events button');
     const latest = buttons.map((b) => ({ b, ev: EV.find((e) => e[1] === b.textContent) })).sort((a, b) => b.ev[0] - a.ev[0])[0];
@@ -288,7 +322,7 @@ describe('Хронологічний виклик (chronology.js)', () => {
   });
 
   test('не вдалося зберегти результат: 401 / інша помилка', async () => {
-    await checkSaveErrors(async (options) => playChronology(0, options));
+    await checkSaveErrors((options) => playChronology(0, options));
   });
 });
 
@@ -303,38 +337,72 @@ describe('Знайди відповідність (matching-task.js)', () => {
     assert.equal(new Set(Q.map((q) => q.correctAnswerId)).size, Q.length, 'дві різні пари не можуть мати одну відповідь');
   });
 
-  function start(options) {
-    const g = mountGame('matching-task', options);
+  async function start(options) {
+    const g = await mountGame('matching-task', options);
     findByText(g.panel(), 'button', 'Start').click();
     return g;
   }
-  function matchAll(g) {
+  // Робить mistakes неправильних спроб, потім складає всі пари правильно
+  function play(g, mistakes) {
     const panel = g.panel();
-    for (const qb of panel.querySelectorAll('.matching-question')) {
-      const q = Q.find((x) => x.question === qb.textContent);
-      qb.click();
-      findByText(panel, '.matching-answer', answerText(q)).click();
+    const qb = panel.querySelector('.matching-question');
+    const q = Q.find((x) => x.question === qb.textContent);
+    const wrong = panel.querySelectorAll('.matching-answer').find((b) => b.textContent !== answerText(q));
+    for (let k = 0; k < mistakes; k++) { qb.click(); wrong.click(); }
+    for (const b of panel.querySelectorAll('.matching-question')) {
+      const qq = Q.find((x) => x.question === b.textContent);
+      b.click();
+      findByText(panel, '.matching-answer', answerText(qq)).click();
     }
+    return g;
   }
 
-  test('у раунді 4 запитання і 4 відповіді, кожна відповідь пасує до одного з запитань', () => {
-    const panel = start().panel();
+  test('у раунді 4 запитання і 4 відповіді, кожна відповідь пасує до одного з запитань', async () => {
+    const panel = (await start()).panel();
     const qs = panel.querySelectorAll('.matching-question').map((b) => Q.find((q) => q.question === b.textContent));
     const as = panel.querySelectorAll('.matching-answer').map((b) => b.textContent).sort();
     assert.equal(qs.length, 4);
     assert.deepEqual(qs.map(answerText).sort(), as);
   });
 
-  test('усі пари без помилок → 4 / 4, «Ідеальний результат», результат збережено', () => {
-    const g = start();
-    matchAll(g);
-    assert.equal(g.panel().querySelector('.big').textContent, '4 / 4');
+  test('без помилок → 10 / 10, «Бездоганно», «Ідеальний результат», збережено 10 з 10', async () => {
+    const g = play(await start(), 0);
+    assert.equal(g.panel().querySelector('.big').textContent, '10 / 10');
+    assert.match(g.panel().textContent, /Бездоганно: жодної помилки\./);
     assert.match(g.panel().textContent, /Ідеальний результат/);
-    assert.deepEqual(g.saved, [{ game: 'matching-task', score: 4, total: 4 }]);
+    assert.deepEqual(g.saved, [{ game: 'matching-task', score: 10, total: 10 }]);
   });
 
-  test('неправильна пара: +1 помилка, нічого не позначається як вгадане', () => {
-    const g = start();
+  test('1 помилка → 9 / 10, «Добре знаєш історію.», збережено 9 з 10', async () => {
+    const g = play(await start(), 1);
+    assert.equal(g.panel().querySelector('.big').textContent, '9 / 10');
+    assert.match(g.panel().textContent, /Добре знаєш історію\./);
+    assert.match(g.panel().textContent, /Були помилки: 1/);
+    assert.deepEqual(g.saved, [{ game: 'matching-task', score: 9, total: 10 }]);
+  });
+
+  test('3 помилки → 7 / 10 — ще «Добре знаєш історію.» (межа)', async () => {
+    const g = play(await start(), 3);
+    assert.equal(g.panel().querySelector('.big').textContent, '7 / 10');
+    assert.match(g.panel().textContent, /Добре знаєш історію\./);
+  });
+
+  test('4 помилки → 6 / 10, «Варто повторити матеріал»', async () => {
+    const g = play(await start(), 4);
+    assert.equal(g.panel().querySelector('.big').textContent, '6 / 10');
+    assert.match(g.panel().textContent, /Варто повторити матеріал\. Спробуй ще раз\./);
+    assert.deepEqual(g.saved, [{ game: 'matching-task', score: 6, total: 10 }]);
+  });
+
+  test('багато помилок → рахунок не падає нижче 0', async () => {
+    const g = play(await start(), 15);
+    assert.equal(g.panel().querySelector('.big').textContent, '0 / 10');
+    assert.match(g.panel().textContent, /Були помилки: 15/);
+    assert.deepEqual(g.saved, [{ game: 'matching-task', score: 0, total: 10 }]);
+  });
+
+  test('неправильна пара: +1 помилка, нічого не позначається як вгадане', async () => {
+    const g = await start();
     const panel = g.panel();
     const qb = panel.querySelector('.matching-question');
     const q = Q.find((x) => x.question === qb.textContent);
@@ -346,25 +414,14 @@ describe('Знайди відповідність (matching-task.js)', () => {
     assert.match(panel.textContent, /Прогрес 0 \/ 4/);
   });
 
-  test('клік по відповіді без вибраного запитання нічого не робить', () => {
-    const g = start();
+  test('клік по відповіді без вибраного запитання нічого не робить', async () => {
+    const g = await start();
     g.panel().querySelector('.matching-answer').click();
     assert.match(g.panel().textContent, /Помилки: 0/);
     assert.match(g.panel().textContent, /Прогрес 0 \/ 4/);
   });
 
-  test('з помилками: у підсумку «Були помилки: N»', () => {
-    const g = start();
-    const panel = g.panel();
-    const qb = panel.querySelector('.matching-question');
-    const q = Q.find((x) => x.question === qb.textContent);
-    qb.click();
-    panel.querySelectorAll('.matching-answer').find((b) => b.textContent !== answerText(q)).click();
-    matchAll(g);
-    assert.match(g.panel().textContent, /Були помилки: 1/);
-  });
-
   test('не вдалося зберегти результат: 401 / інша помилка', async () => {
-    await checkSaveErrors(async (options) => { const g = start(options); matchAll(g); return g; });
+    await checkSaveErrors(async (options) => play(await start(options), 0));
   });
 });

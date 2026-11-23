@@ -1,17 +1,17 @@
-'use strict';
 // API сервера (server/server.js): реєстрація, вхід, сесії, результати, захист.
 // Сервер запускається на випадковому порту з ТИМЧАСОВОЮ базою в папці temp —
 // справжня server/data/app.db не змінюється.
-const { describe, test, before, after } = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const http = require('http');
-const crypto = require('crypto');
-const Module = require('module');
-const { ROOT } = require('./helpers/browser-env');
+import { describe, test, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import http from 'node:http';
+import crypto from 'node:crypto';
+import Module, { createRequire } from 'node:module';
+import { ROOT } from './helpers/browser-env.js';
 
+const require = createRequire(import.meta.url);
 const SERVER_DIR = path.join(ROOT, 'server');
 
 function skipReason() {
@@ -62,7 +62,7 @@ describe('API сервера', { skip: skipReason() }, () => {
     try {
       // Запускаємо справжній server.js, але так, ніби він лежить у тимчасовій папці
       const file = path.join(fakeServerDir, 'server.js');
-      const m = new Module(file, module);
+      const m = new Module(file, null);
       m.filename = file;
       m.paths = Module._nodeModulePaths(SERVER_DIR); // express та ін. — з server/node_modules
       m._compile(fs.readFileSync(path.join(SERVER_DIR, 'server.js'), 'utf8'), file);

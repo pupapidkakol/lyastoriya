@@ -1,14 +1,14 @@
-'use strict';
-// Мінімальне «браузерне» оточення, щоб запускати скрипти з public/js у Node.js
+// Мінімальне «браузерне» оточення, щоб запускати ігри (ES-модулі з public/js/games) у Node.js
 // без зовнішніх бібліотек (без jsdom). Підтримує рівно те, що використовують ігри:
 // createElement, append/appendChild, textContent, classList, dataset, style,
 // addEventListener/click, querySelector(All) з простими селекторами.
-const fs = require('fs');
-const path = require('path');
-const vm = require('vm');
+import fs from 'node:fs';
+import path from 'node:path';
+import vm from 'node:vm';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const ROOT = path.resolve(__dirname, '..', '..');
-const PUBLIC = path.join(ROOT, 'public');
+export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
+export const PUBLIC = path.join(ROOT, 'public');
 
 function camel(s) { return s.replace(/-([a-z])/g, (_, c) => c.toUpperCase()); }
 
@@ -88,6 +88,7 @@ class FakeNode {
     this._text = v == null ? '' : String(v);
   }
 
+  get childNodes() { return this._text ? [{ textContent: this._text }, ...this.children] : this.children.slice(); }
   get firstChild() { return this.children[0] || null; }
   get lastChild() { return this.children[this.children.length - 1] || null; }
 
@@ -99,7 +100,6 @@ class FakeNode {
     if (node.parentNode) node.parentNode._removeChild(node);
     node.parentNode = this;
     this.children.push(node);
-    if (this.ownerDocument._onAppend) this.ownerDocument._onAppend(node);
     return node;
   }
   append(...nodes) {
@@ -152,7 +152,7 @@ class FakeNode {
 }
 
 function createDocument() {
-  const doc = { title: '', activeElement: null, _onAppend: null };
+  const doc = { title: '', activeElement: null };
   doc.createElement = (tag) => new FakeNode(doc, tag);
   doc.createTextNode = (t) => { const n = new FakeNode(doc, '#text', 'text'); n._text = String(t); return n; };
   doc.createDocumentFragment = () => new FakeNode(doc, '#fragment', 'fragment');
@@ -167,11 +167,12 @@ function createDocument() {
   return doc;
 }
 
-// fetch, що читає файли з папки public (як статичний сервер)
+// fetch, що читає файли з папки public (як статичний сервер). Приймає і відносні шляхи, і file:-URL.
 function fileResponse(url) {
-  const clean = decodeURIComponent(String(url).split(/[?#]/)[0]);
-  const file = path.join(PUBLIC, clean);
-  if (!file.startsWith(PUBLIC) || !fs.existsSync(file)) {
+  const file = url.startsWith('file:')
+    ? fileURLToPath(url.split(/[?#]/)[0])
+    : path.join(PUBLIC, decodeURIComponent(url.split(/[?#]/)[0]));
+  if (!path.resolve(file).startsWith(PUBLIC) || !fs.existsSync(file)) {
     return { ok: false, status: 404, json: () => Promise.reject(new Error('404')) };
   }
   const text = fs.readFileSync(file, 'utf8').replace(/^﻿/, '');
@@ -179,76 +180,65 @@ function fileResponse(url) {
 }
 
 /**
- * Створює ізольоване «вікно браузера».
- * options.search    — рядок location.search, напр. '?g=quiz'
- * options.fetch     — (url) => відповідь {ok, status, json()}; за замовчуванням читає файли з public/
+ * Ставить у globalThis «браузерні» document, location, api і fetch.
+ * options.search     — рядок location.search, напр. '?g=quiz'
+ * options.fetch      — (url) => відповідь {ok, status, json()}; за замовчуванням читає файли з public/
  * options.saveResult — (body) => Promise; за замовчуванням успіх
+ * Тести в одному файлі йдуть по черзі, тому кожен тест просто ставить собі нове оточення.
  */
-function createEnv(options = {}) {
+export function installBrowser(options = {}) {
   const document = createDocument();
   const saved = [];
   const fetchCalls = [];
   const consoleErrors = [];
-  const api = {
+  globalThis.document = document;
+  globalThis.location = { search: options.search || '' };
+  globalThis.api = {
     saveResult(body) {
       saved.push(JSON.parse(JSON.stringify(body)));
       return options.saveResult ? options.saveResult(body) : Promise.resolve({ ok: true });
     }
   };
-  const sandbox = {
-    console: { log() {}, info() {}, warn() {}, error: (...a) => consoleErrors.push(a.map(String).join(' ')) },
-    URL,
-    URLSearchParams,
-    document,
-    api,
-    Games: {},
-    location: { search: options.search || '' },
-    crypto: {
-      getRandomValues(a) { for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 4294967296); return a; }
-    },
-    fetch: (url, init) => {
-      fetchCalls.push(String(url));
-      return Promise.resolve(options.fetch ? options.fetch(String(url), init) : fileResponse(url));
-    },
-    // Таймери (підсвітка помилки на 0,5 с) у тестах не потрібні.
-    setTimeout: () => 0,
-    clearTimeout: () => {}
+  globalThis.fetch = (url) => {
+    const s = url instanceof URL ? url.href : String(url);
+    fetchCalls.push(s);
+    return Promise.resolve(options.fetch ? options.fetch(s) : fileResponse(s));
   };
-  sandbox.window = sandbox;
-  const context = vm.createContext(sandbox);
-
-  function run(relFromPublic) {
-    const file = path.join(PUBLIC, relFromPublic);
-    vm.runInContext(fs.readFileSync(file, 'utf8'), context, { filename: file });
-  }
-  // Імітуємо підвантаження <script src> (так працює game-page.js)
-  document._onAppend = (node) => {
-    if (node.tagName === 'SCRIPT' && node.src) {
-      run(node.src);
-      if (typeof node.onload === 'function') node.onload();
-    }
-  };
-
-  return { window: sandbox, document, api, saved, fetchCalls, consoleErrors, run };
+  // Ігри пишуть у console.error, коли не вдалося завантажити дані, — збираємо, а не друкуємо
+  console.error = (...a) => consoleErrors.push(a.map(String).join(' '));
+  return { document, saved, fetchCalls, consoleErrors };
 }
 
-/** Завантажує гру public/js/games/<id>.js і монтує її в новий контейнер. */
-function mountGame(id, options) {
-  const env = createEnv(options);
-  env.run('js/games/' + id + '.js');
+export function gameUrl(id) {
+  return pathToFileURL(path.join(PUBLIC, 'js', 'games', id + '.js')).href;
+}
+
+/** Імпортує гру public/js/games/<id>.js, ставить нове оточення і монтує гру в новий контейнер. */
+export async function mountGame(id, options) {
+  const mod = await import(gameUrl(id));
+  const env = installBrowser(options);
   const root = env.document.createElement('div');
   env.document.body.appendChild(root);
-  env.window.Games[id].mount(root);
-  return Object.assign(env, { root, panel: () => root.querySelector('.panel') });
+  mod.mount(root);
+  return Object.assign(env, { mod, root, panel: () => root.querySelector('.panel') });
 }
 
 /** Дає відпрацювати всім промісам (fetch → json → обробка). */
-async function flush() {
+export async function flush() {
   for (let i = 0; i < 5; i++) await new Promise((r) => setImmediate(r));
 }
 
+/** Чекає, поки умова стане істинною (напр. динамічний import у game-page.js). */
+export async function waitFor(check, ms = 3000) {
+  const end = Date.now() + ms;
+  while (!check()) {
+    if (Date.now() > end) throw new Error('Не дочекалися умови за ' + ms + ' мс');
+    await new Promise((r) => setTimeout(r, 10));
+  }
+}
+
 /** Знаходить кнопку (або інший елемент) за точним текстом. */
-function findByText(container, selector, text) {
+export function findByText(container, selector, text) {
   const found = container.querySelectorAll(selector).find((e) => e.textContent.trim() === text);
   if (!found) throw new Error(`Не знайдено «${selector}» з текстом «${text}»`);
   return found;
@@ -258,7 +248,7 @@ function findByText(container, selector, text) {
  * Дістає літерал масиву/об'єкта з вихідного коду, напр. extractLiteral('server/server.js', 'GAMES').
  * Потрібно, щоб тести брали дані прямо з коду і не дублювали їх.
  */
-function extractLiteral(relFromRoot, name) {
+export function extractLiteral(relFromRoot, name) {
   const src = fs.readFileSync(path.join(ROOT, relFromRoot), 'utf8');
   const m = new RegExp('\\b' + name + '\\s*=\\s*([\\[{])').exec(src);
   if (!m) throw new Error(`Не знайдено «${name} = …» у ${relFromRoot}`);
@@ -285,8 +275,6 @@ function extractLiteral(relFromRoot, name) {
   throw new Error(`Не вдалося розібрати «${name}» у ${relFromRoot}`);
 }
 
-function readJson(relFromPublic) {
+export function readJson(relFromPublic) {
   return JSON.parse(fs.readFileSync(path.join(PUBLIC, relFromPublic), 'utf8').replace(/^﻿/, ''));
 }
-
-module.exports = { ROOT, PUBLIC, createEnv, mountGame, flush, findByText, extractLiteral, readJson };

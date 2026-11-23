@@ -1,10 +1,9 @@
-'use strict';
 // Перевірка JSON-даних у public/data: структура, посилання між файлами, наявність картинок.
-const { describe, test } = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('fs');
-const path = require('path');
-const { PUBLIC, readJson, extractLiteral } = require('./helpers/browser-env');
+import { describe, test } from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { PUBLIC, readJson, extractLiteral } from './helpers/browser-env.js';
 
 const QUIZ_ROUND = 10;
 const FOF_ROUND = 10;
@@ -120,6 +119,7 @@ describe('theory(1).json — теорія', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Увага: зараз гра бере твердження з масиву Q у fake-or-fact.js, а не з цього JSON.
 describe('fake-or-fact.json — «Фейк чи факт»', () => {
   const data = readJson('data/fake-or-fact.json');
   const ERA = extractLiteral('public/js/games/fake-or-fact.js', 'ERA');

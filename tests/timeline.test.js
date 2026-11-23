@@ -1,8 +1,7 @@
-'use strict';
 // «Коли це сталося?» (timeline.js): нарахування балів, тексти, повзунок і кнопки ±.
-const { describe, test } = require('node:test');
-const assert = require('node:assert/strict');
-const { mountGame, flush, findByText, readJson } = require('./helpers/browser-env');
+import { describe, test } from 'node:test';
+import assert from 'node:assert/strict';
+import { mountGame, flush, findByText, readJson } from './helpers/browser-env.js';
 
 const REAL = readJson('data/timeline-events.json');
 
@@ -15,7 +14,7 @@ const CONTROLLED = {
 const serve = (data) => ({ fetch: () => ({ ok: true, status: 200, json: () => Promise.resolve(data) }) });
 
 async function startGame(data) {
-  const g = mountGame('timeline', data ? serve(data) : undefined);
+  const g = await mountGame('timeline', data ? serve(data) : undefined);
   await flush();
   findByText(g.panel(), 'button', 'Почати').click();
   return g;
@@ -161,18 +160,18 @@ describe('Коли це сталося? (timeline.js)', () => {
   });
 
   test('помилка завантаження або замало подій → повідомлення', async () => {
-    const g1 = mountGame('timeline', { fetch: () => ({ ok: false, status: 404, json: () => Promise.resolve({}) }) });
+    const g1 = await mountGame('timeline', { fetch: () => ({ ok: false, status: 404, json: () => Promise.resolve({}) }) });
     await flush();
     assert.match(g1.panel().textContent, /Не вдалося завантажити події/);
 
-    const g2 = mountGame('timeline', serve({ meta: CONTROLLED.meta, events: CONTROLLED.events.slice(0, 4) }));
+    const g2 = await mountGame('timeline', serve({ meta: CONTROLLED.meta, events: CONTROLLED.events.slice(0, 4) }));
     await flush();
     assert.match(g2.panel().textContent, /Не вдалося завантажити події/);
   });
 
   test('стилі гри підключаються один раз', async () => {
-    const g = mountGame('timeline', serve(CONTROLLED));
-    g.window.Games.timeline.mount(g.document.createElement('div'));
+    const g = await mountGame('timeline', serve(CONTROLLED));
+    g.mod.mount(g.document.createElement('div'));
     assert.equal(g.document.querySelectorAll('link[data-game-css="timeline"]').length, 1);
   });
 });
