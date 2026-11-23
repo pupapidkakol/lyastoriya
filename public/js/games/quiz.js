@@ -181,41 +181,13 @@ export function mount(root) {
                     } else status.textContent = 'Результат не збережено — сервер недоступний.';
                 });
             }
-            verdict.appendChild(sources);
-
-            const last = i === ROUND - 1;
-            verdict.append(btn(last ? 'Результат' : 'Далі', 'btn--accent', () => {
-              i++;
-              last ? finish() : ask();
-            }));
-            panel.appendChild(verdict);
-          }
-
-          function finish() {
-            panel.textContent = '';
-            const status = el('p', 'hint', 'Зберігаємо результат…');
-            panel.append(
-              el('p', 'big', score + ' / ' + ROUND),
-              el('p', 'q-text', score >= 9 ? 'Відмінно!' : score >= 6 ? 'Непогано!' : 'Спробуй ще раз.'),
-              status,
-              btn('Грати ще', 'btn--accent', play)
-            );
-            api.saveResult({ game: 'quiz', score: score, total: ROUND }).then(() => {
-              status.textContent = 'Результат збережено у твоєму профілі.';
-            }).catch((e) => {
-              if (e.status === 401) {
-                status.textContent = 'Увійди в акаунт, щоб зберігати результати. ';
-                let a = el('a', 'link', 'Увійти'); a.href = 'auth.html#login'; status.appendChild(a);
-              } else status.textContent = 'Результат не збережено — сервер недоступний.';
-            });
-          }
-
-          ask();
+            ask()
         }
-
-            ask();
-        }
-
         intro();
     }
+
+
 }
+
+
+
