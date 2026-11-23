@@ -1,6 +1,7 @@
 import { shuffle, isCorrect } from './quiz-logic.js';
 
 const ROUND = 4;
+const MAX_SCORE = 10;
 const Q = [
     {
         Questionid: 1,
@@ -71,7 +72,7 @@ export function mount(root) {
         panel.textContent = '';
         panel.append(
             el('p', 'q-text', 'Поєднуй імена, події та дати. Розгадай, як творилася Гетьманщина.'),
-            el('p', 'hint', 'У базі ' + ROUND + ' раунди.'),
+            el('p', 'hint', 'У базі ' + ROUND + ' пари на раунд. Починаєш із ' + MAX_SCORE + ' балів; кожна помилка забирає один бал.'),
             btn('Start', 'btn--accent', play)
         );
     }
@@ -121,20 +122,23 @@ export function mount(root) {
                     finish();
                 }
             } else {
-                mistakes++
+                mistakes++;
                 answerEl.classList.add('matching-is-wrong');
                 setTimeout(() => { answerEl.classList.remove('matching-is-wrong'); }, 500)
                 let mistakesLabel = panel.querySelector('.matching-mistakes-count');
                 if (mistakesLabel) mistakesLabel.textContent = 'Помилки: ' + mistakes;
+                let pointsLabel = panel.querySelector('.matching-points-count');
+                if (pointsLabel) pointsLabel.textContent = 'Бали: ' + Math.max(0, MAX_SCORE - mistakes);
             }
         }
 
         function finish() {
+            const points = Math.max(0, MAX_SCORE - mistakes);
             panel.textContent = '';
             const status = el('p', 'hint', 'Зберігаємо результат…');
             panel.append(
-                el('p', 'big', score + ' / ' + ROUND),
-                el('p', 'q-text', score >= 4 ? 'Відмінно!' : 'Спробуй ще раз.'),
+                el('p', 'big', points + ' / ' + MAX_SCORE),
+                el('p', 'q-text', points === MAX_SCORE ? 'Бездоганно: жодної помилки.' : points >= 7 ? 'Добре знаєш історію.' : 'Варто повторити матеріал. Спробуй ще раз.'),
                 el('p', 'matching-review__result', mistakes === 0 ? 'Ідеальний результат' : 'Були помилки: ' + mistakes),
                 status
             );
@@ -154,7 +158,7 @@ export function mount(root) {
 
             panel.append(review, btn('Грати ще', 'btn--accent', play));
 
-            api.saveResult({ game: 'matching-task', score: score, total: ROUND }).then(() => {
+            api.saveResult({ game: 'matching-task', score: points, total: MAX_SCORE }).then(() => {
                 status.textContent = 'Результат збережено у твоєму профілі.';
             }).catch((e) => {
                 if (e.status === 401) {
@@ -174,6 +178,7 @@ export function mount(root) {
             let meta = el('div', 'q-meta');
             let mistakesLabel = el('span', 'matching-mistakes-count', 'Помилки: ' + mistakes);
             let progressLabel = el('span', 'matching-progress-count', 'Прогрес ' + matchedQuestionIds.size + ' / ' + ROUND);
+
             meta.append(
                 progressLabel,
                 mistakesLabel

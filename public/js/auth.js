@@ -1,5 +1,4 @@
 var forms = { login: document.getElementById('loginForm'), register: document.getElementById('registerForm') };
-console.log(forms);
 function show() {
   var m = location.hash === '#register' ? 'register' : 'login';
   forms.login.hidden = m !== 'login'; forms.register.hidden = m !== 'register';
